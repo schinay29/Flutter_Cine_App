@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-class UserScreen extends StatelessWidget {
+class DiscountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("users"),
+        child: Text("Discount"),
       ),
     );
   }
