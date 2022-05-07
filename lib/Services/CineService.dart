@@ -8,6 +8,7 @@ class CineService {
   final String apiUrl = ApiConstants.baseUrl;
   
   Future<List<MovieModel>> getMovies() async {
+    //review error 
     Response res = await get(Uri.parse('$apiUrl/Movies'));
 
     if (res.statusCode == 200) {
