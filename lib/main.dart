@@ -1,4 +1,4 @@
-import 'package:cine_view/models/MovieModel.dart';
+import 'package:cine_view/screens/buyTickets_screen.dart';
 import 'package:cine_view/screens/discount%20_screen.dart';
 import 'package:cine_view/screens/home_screen.dart';
 import 'package:cine_view/screens/search_screen.dart';
@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'Services/CineService.dart';
+import 'models/User.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,22 +18,28 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // List<MovieModel> movieList;
+  CineService _cineService = new CineService();
   int _indexPage = 0;
   List<Widget> _screens = [
-    HomeScreen(),
+    BuyTicketsScreen(),
     DiscountScreen(),
     SearchScreen(),
     UserScreen()
   ];
 
-
-
-  
+  @override
+  void initState() {
+    // first method init 
+    // get all from db here
+    print("init");
+    var user = _cineService.getUser(1);
+    print("usseeeer : ${user}" );
+  }
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]);
-
+    print("pruebaaa");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

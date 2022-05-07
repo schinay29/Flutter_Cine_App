@@ -1,24 +1,30 @@
 import 'dart:convert';
 
 import 'package:cine_view/backend/constants.dart';
-import 'package:cine_view/models/MovieModel.dart';
 import 'package:http/http.dart';
+
+import '../models/Movie.dart';
+import '../models/User.dart';
 
 class CineService {
   final String apiUrl = ApiConstants.baseUrl;
   
-  Future<List<MovieModel>> getMovies() async {
-    //review error 
+  Future<List<Movie>> getMovies() async {
     Response res = await get(Uri.parse('$apiUrl/Movies'));
 
-    if (res.statusCode == 200) {
+    if (res.statusCode != 200) throw  "Failed to load cases list";
       List<dynamic> body = jsonDecode(res.body);
-      List<MovieModel> cases = body.map((dynamic item) => MovieModel.fromJson(item)).toList();
-      return cases;
-    } else {
-      throw "Failed to load cases list";
-    }
+      List<Movie> movies = body.map((dynamic item) => Movie.fromJson(item)).toList();
+      return movies;
   }
+
+  Future<User> getUser(int id) async {
+    Response res = await get(Uri.parse('$apiUrl/User/${id}'));
+
+    if(res.statusCode != 200) throw  "Failed to load cases list";
+    return User.fromJson(json.decode(res.body));
+  }
+  
 
 
 }
