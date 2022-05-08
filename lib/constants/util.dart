@@ -1,3 +1,4 @@
+import 'package:cine_view/screens/movies/movies.dart';
 import 'package:flutter/material.dart';
 import 'package:cine_view/screens/home_screen.dart';
 import 'package:cine_view/theme/theme_colors.dart';
@@ -9,7 +10,7 @@ showMessage(BuildContext context, String contentMessage) {
       Navigator.pop(context);
 
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => ListMovie()),
           (Route<dynamic> route) => false);
     },
   );
