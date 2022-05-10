@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cine_view/backend/constants.dart';
+import 'package:cine_view/models/RoomMovie.dart';
 import 'package:http/http.dart';
 
 import '../models/Movie.dart';
@@ -24,4 +25,14 @@ class CineService {
 
   //   if (res.statusCode != 200) return User.fromJson(json.decode(res.body));
   // }
+
+  Future<List<RoomMovie>> getSession(int movieId) async {
+    Response res = await get(Uri.parse('$apiUrl/RoomMovie/GetList/${movieId}'));
+    print("in session ");
+    //if(res.statusCode != 200) return new List.empty();
+     return (json.decode(res.body) as List)
+      .map((data) => RoomMovie.fromJson(data))
+      .toList();
+
+  }
 }

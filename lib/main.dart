@@ -1,3 +1,4 @@
+import 'package:cine_view/screens/buyout/buyTickets_screen.dart';
 import 'package:cine_view/screens/movies/List.dart';
 import 'package:cine_view/screens/user_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _indexPage = 0;
-  List<Widget> _screens = [ListMovie(), UserScreen()];
+  List<Widget> _screens = [ListMovie(), BuyTicketsScreen()];
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]);
