@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:cine_view/constants/util.dart';
+import 'package:cine_view/models/Movie.dart';
 import 'package:cine_view/screens/movies/Detail.dart';
+// import 'package:cine_view/screens/movies/Detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cine_view/constants/base_api.dart';
@@ -13,7 +15,7 @@ class ListMovie extends StatefulWidget {
 }
 
 class _ListMovieState extends State<ListMovie> {
-  List movies = [];
+  List <Movie> movies = [];
   bool isLoading = false;
   @override
   void initState() {
@@ -29,9 +31,9 @@ class _ListMovieState extends State<ListMovie> {
     var url = BASE_API + "movie";
     var response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      var items = json.decode(response.body);
       setState(() {
-        movies = items;
+         List<dynamic> body = jsonDecode(response.body);
+         movies =body.map((dynamic item) => Movie.fromJson(item)).toList();
         isLoading = false;
       });
     } else {
@@ -40,6 +42,8 @@ class _ListMovieState extends State<ListMovie> {
         isLoading = false;
       });
     }
+    print("testtt movies");
+    print(movies.first.description);
   }
 
   @override
@@ -50,31 +54,31 @@ class _ListMovieState extends State<ListMovie> {
   }
 
   Widget getBody() {
-    if (movies.contains(null) || movies.length < 0 || isLoading) {
+    if (movies.isEmpty|| isLoading) {
       return Center(child: CircularProgressIndicator());
     }
     return ListView.builder(
         itemCount: movies.length,
         itemBuilder: (context, index) {
-          return getCard(movies[index]);
+          return getCard(movies.elementAt(index));
         });
   }
 
-  Widget getCard(item) {
-    print(item['img']);
+  Widget getCard(Movie item) {
     return Card(
       elevation: 5,
       child: InkWell(
         //Wrapped Row with InkWell
         onTap: () {
+
           // showMessage(context, item['movieId'].toString());
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => MovieDetailScreen()),
+              MaterialPageRoute(builder: (context) => MovieDetailScreen(item)),
               (Route<dynamic> route) => false);
         }, //Add this as well
         child: Row(
           children: <Widget>[
-            Container(height: 180, child: Image.network(item['img'])),
+            Container(height: 180, child: Image.network(item.img)),
             Expanded(
               child: Ink(
                 height: 180,
@@ -82,11 +86,11 @@ class _ListMovieState extends State<ListMovie> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(item['name'],
+                    Text(item.name,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
                     SizedBox(height: 10),
-                    Expanded(child: Text(item['description']))
+                    Expanded(child: Text(item.description))
                   ],
                 ),
               ),
