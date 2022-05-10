@@ -1,4 +1,4 @@
-import 'package:cine_view/screens/movies/movies.dart';
+import 'package:cine_view/screens/movies/List.dart';
 import 'package:flutter/material.dart';
 import 'package:cine_view/screens/home_screen.dart';
 import 'package:cine_view/theme/theme_colors.dart';

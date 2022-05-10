@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:cine_view/constants/util.dart';
-import 'package:cine_view/screens/movies/detail.dart';
-import 'package:cine_view/screens/user/create.dart';
+import 'package:cine_view/screens/movies/Detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cine_view/constants/base_api.dart';
@@ -62,6 +61,7 @@ class _ListMovieState extends State<ListMovie> {
   }
 
   Widget getCard(item) {
+    print(item['img']);
     return Card(
       elevation: 5,
       child: InkWell(
