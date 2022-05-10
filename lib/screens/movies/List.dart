@@ -78,7 +78,7 @@ class _ListMovieState extends State<ListMovie> {
         }, //Add this as well
         child: Row(
           children: <Widget>[
-            Container(height: 180, child: Image.network(item.img)),
+            Container(height: 180,width:180 , child: Image.network(item.img, fit: BoxFit.cover)),
             Expanded(
               child: Ink(
                 height: 180,
