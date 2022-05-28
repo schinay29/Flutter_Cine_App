@@ -16,6 +16,7 @@ class ListMovie extends StatefulWidget {
 
 class _ListMovieState extends State<ListMovie> {
   List <Movie> movies = [];
+  
   bool isLoading = false;
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _ListMovieState extends State<ListMovie> {
       });
     }
     print("testtt movies");
-    print(movies.first.description);
+    //print(movies.first.description);
   }
 
   @override
