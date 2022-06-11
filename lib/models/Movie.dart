@@ -13,7 +13,7 @@ class Movie {
   Movie( this.movieId, this.name, this.description, this.date, this.duration, this.urlVideo, this.img, this.starRating );
    
    Movie.fromJson(Map<String, dynamic> json) 
-      : movieId = json['movieId'],
+      : movieId = json['id'],
         name = json['name'],
         description = json['description'],
         date = json['date'],

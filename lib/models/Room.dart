@@ -8,7 +8,7 @@ class Room {
   Room( this.roomId, this.number, this.row, this.col, this.cinemaId);
    
    Room.fromJson(Map<String, dynamic> json) 
-      : roomId = json['roomId'].toString(),
+      : roomId = json['id'].toString(),
         number = json['number'].toString(),
         row = json['row'].toString(),
         col = json['col'].toString(),
