@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Movie {
   final int movieId;
   final String name;
@@ -6,8 +8,9 @@ class Movie {
   final int duration;
   final String urlVideo;
   final String img;
+  final int starRating;
 
-  Movie( this.movieId, this.name, this.description, this.date, this.duration, this.urlVideo, this.img );
+  Movie( this.movieId, this.name, this.description, this.date, this.duration, this.urlVideo, this.img, this.starRating );
    
    Movie.fromJson(Map<String, dynamic> json) 
       : movieId = json['movieId'],
@@ -16,7 +19,9 @@ class Movie {
         date = json['date'],
         duration = json['duration'],
         urlVideo = json['urlVideo'],
-        img = json['img'];
+        img = json['img'],
+        starRating = json['starRating'];
+        
     
   
 }

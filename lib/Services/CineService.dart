@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cine_view/backend/constants.dart';
+import 'package:cine_view/models/Actor.dart';
 import 'package:cine_view/models/RoomMovie.dart';
 import 'package:http/http.dart';
 
@@ -53,4 +54,12 @@ class CineService {
     (jsonDecode(res.body) as List).map((e) => buyseats.add(e)).toList();
     return buyseats;
   } 
+
+  Future<List<Actor>> getCast(int movieId) async {
+    final res = await get(Uri.parse('$apiUrl/Cast/${movieId}'));
+     return (json.decode(res.body) as List)
+      .map((data) => Actor.fromJson(data))
+      .toList();
+  } 
+
 }

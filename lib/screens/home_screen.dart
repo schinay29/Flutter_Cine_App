@@ -1,6 +1,7 @@
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Movie.dart';
 import 'package:cine_view/models/RoomMovie.dart';
+import 'package:cine_view/screens/moviedetail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -15,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   CineService _cineService = new CineService();
    List<Movie> movies = [];
    int _currentPage = 0;
+   
 
   @override
   Widget build(BuildContext context) {
@@ -22,19 +24,32 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Container(
         padding: const EdgeInsets.only(right: 15.0, bottom: 20.0, top: 20.0),
        // height: 200,
-        child: FutureBuilder<List<Movie>>(
+        child: FutureBuilder(
           // future: _cineService.getSession(2),
           future: _cineService.getMovies(),
-          builder: (context, snapshot) {
+          builder: (context,  AsyncSnapshot<List<Movie>> snapshot) {
             while (snapshot.connectionState == ConnectionState.waiting)
               return CircularProgressIndicator();
-            if (snapshot.connectionState == ConnectionState.done) movies = snapshot.data!;
+            if (snapshot.connectionState == ConnectionState.done){
+              if (snapshot.hasData) {
+                if (snapshot.data != null) movies = snapshot.data!;
+              }
+            } 
             return Column(
               children: [
                 _buildRecentMovies(),
                 _buildPageIndicator(), 
                 SizedBox(height: 40,),
-                _buildAllMovies()
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                
+
+                child: Row(
+                  
+                  children: List.generate(movies.length, ((index) => _buildAllMovies(movies[index]))),
+                )
+                
+                )
               ],
             );
         },)
@@ -52,8 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildRecentMovies() {
     return CarouselSlider(
-      
       options: CarouselOptions(height: 250.0,
+      aspectRatio: 16/9,
+      viewportFraction: 0.6,
+      enlargeCenterPage: true,
        onPageChanged: ( index, reason ) => {
                 print(index),
                 // setState(() {
@@ -61,30 +78,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   
                 // })
             },),
-      // items: ['https://es.web.img3.acsta.net/pictures/14/01/30/18/07/456916.jpg', 'https://es.web.img3.acsta.net/pictures/14/01/30/18/07/456916.jpg'].map((i) {
       items: movies.map((i) {
         return Builder(
           builder: (BuildContext context) {
             return Container(
-              width: 200,
-              //width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              //width: 200,
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.symmetric(horizontal: 0),
               decoration: BoxDecoration(
+                image:DecorationImage(
+                image: NetworkImage(i.img),
+                fit: BoxFit.cover
+                ),
                 color: Colors.amber,
                 borderRadius: BorderRadius.circular(10.0)),
-              // child: Text('text $i', style: TextStyle(fontSize: 16.0),
               child: GestureDetector(
-                         child: Image.network(i.img, fit: BoxFit.fill),
+                        // child: Image.network(i.img, fit: BoxFit.cover),
                         //child: Text('text $i', style: TextStyle(fontSize: 16.0),
                         onTap: () {
                           print('tap '+ i.movieId.toString());
-                          // Navigator.push<Widget>(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => ImageScreen(i),
-                          //   ),
-                          // );
+                          
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => DetailScreen(i)),
+                            (Route<dynamic> route) => false);
                         }
+
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => DetailScreen(i)));
+                        // }
               )
             );
           },
@@ -109,15 +131,20 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildAllMovies(){
+  Widget _buildAllMovies(Movie movie){
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [ 
-        Image.network('https://es.web.img3.acsta.net/pictures/14/01/30/18/07/456916.jpg', height: 150, width: 150),
+        //Image.network('https://es.web.img3.acsta.net/pictures/14/01/30/18/07/456916.jpg', height: 150, width: 150),
         // ARREGLAR FIT
         //imagen
         Container(
-          padding: EdgeInsets.all(5),
+          margin: EdgeInsets.only( top: 10, left: 15),
+          width: 120,
+          height: 180,
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            image: DecorationImage(image: NetworkImage(movie.img)),
             color: Colors.white38,
             boxShadow: [
               BoxShadow(
@@ -127,31 +154,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          child: Row(
-                children: <Widget>[
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                            //text: "$title\n".toUpperCase(),
-                            text: "hola\n".toUpperCase(),
-                            style: Theme.of(context).textTheme.button),
-                        TextSpan(
-                          text: "adios".toUpperCase(),
-                          style: TextStyle(
-                            color: Colors.black87.withOpacity(0.5),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ]
-        ),
+        //   child: Row(
+        //         children: <Widget>[
+        //           RichText(
+        //             text: TextSpan(
+        //               children: [
+        //                 TextSpan(
+        //                     //text: "$title\n".toUpperCase(),
+        //                     text: "hola\n".toUpperCase(),
+        //                     style: Theme.of(context).textTheme.button),
+        //                 TextSpan(
+        //                   text: "adios".toUpperCase(),
+        //                   style: TextStyle(
+        //                     color: Colors.black87.withOpacity(0.5),
+        //                   ),
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //         ]
+        // ),
+
+        
         )
         
 
       ],
     );
   }
+
 
 }

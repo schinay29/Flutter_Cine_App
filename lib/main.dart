@@ -21,6 +21,11 @@ class _MyAppState extends State<MyApp> {
     SystemChrome.setEnabledSystemUIOverlays([]);
     print("pruebaaa");
     return MaterialApp(
+      // initialRoute: '/main',
+      // routes: {
+      //   '/main': (context) => HomeScreen(),
+      //   '/second': (context) => BuyTicketsScreen(),
+      // },
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
