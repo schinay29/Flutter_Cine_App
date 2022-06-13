@@ -17,7 +17,7 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
   Sessions movieSesions =
       new Sessions(new Movie(0, '', '', '', 0, '', '', 0), []);
   List<int> buySeats = [];
-  int movieId = 2;
+  int movieId = 1;
   String selectedDay = 'lunes';
   String selectedSchedule = '20:00';
 
@@ -178,7 +178,6 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
         .map((e) => e.schedules.where((e) =>
             e.day == selectedDay && e.schedule.contains(selectedSchedule)))
         .first;
-    print('var prueba: ' + prueba.first.toString());
 
     return Container(
       height: 250,
