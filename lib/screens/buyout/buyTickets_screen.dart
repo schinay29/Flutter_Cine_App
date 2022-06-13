@@ -1,9 +1,11 @@
 import 'package:cine_view/Services/CineService.dart';
+import 'package:cine_view/models/Movie.dart';
 import 'package:cine_view/models/Room.dart';
-import 'package:cine_view/models/RoomMovie.dart';
+import 'package:cine_view/models/Session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:group_button/group_button.dart';
+import 'dart:convert';
 
 class BuyTicketsScreen extends StatefulWidget {
   @override
@@ -12,13 +14,9 @@ class BuyTicketsScreen extends StatefulWidget {
 
 class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
   CineService _cineService = new CineService();
-  List<RoomMovie> movieSesions = [];
+  Sessions movieSesions =
+      new Sessions(new Movie(0, '', '', '', 0, '', '', 0), []);
   List<int> buySeats = [];
-  Room room = Room('0', '0', '0', '0', '0');
-  //late Room room;
-  List<RoomMovie> scheduleList = [];
-
-  //late Future<List<RoomMovie>> movieSesions;
   int movieId = 2;
   String selectedDay = 'lunes';
   String selectedSchedule = '20:00';
@@ -27,36 +25,25 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _loadData();
   }
 
   _loadData() async {
-    print('prueba: ' + movieSesions.length.toString());
     await _cineService
         .getSession(movieId)
-        .then((value) => {movieSesions = value });
-
-        
-    // if (this.movieSesions.length == 0) print(movieSesions);
-    // await _cineService
-    //     .getRoomSeat(int.parse(movieSesions.first.roomId))
-    //     .then((value) => {room = value, print('value; ' + room.col)});
-    //     print(room.col);
-    // await _cineService
-    //     .getBuySeats(int.parse(movieSesions.first.id))
-    //     .then((value) => buySeats = value);
-    print(buySeats);
+        .then((value) => {movieSesions = value});
   }
 
   _loadExtra() async {
-    if (this.movieSesions.length == 0) return print('failed');
-    await _cineService
-        .getRoomSeat(int.parse(movieSesions[0].roomId))
-        .then((value) => {room = value, print('value; ' + room.col)});
-        print(room.col);
-    await _cineService
-        .getBuySeats(int.parse(movieSesions.first.id))
-        .then((value) => buySeats = value);
+    print('in loadextra()');
+    //if (this.movieSesions.length == 0) return print('failed');
+    // await _cineService
+    //     .getRoomSeat(movieSesions[0].roomId)
+    //     .then((value) => {room = value});
+    //     print('roomcol: ' + room.col.toString());
+    // await _cineService
+    //     .getBuySeats(movieSesions[0].id)
+    //     .then((value) => buySeats = value);
+    //     print('buyseats: ' + buySeats.length.toString());
   }
 
   @override
@@ -69,23 +56,47 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
           builder: (context, snapshot) {
             while (snapshot.connectionState == ConnectionState.waiting)
               return CircularProgressIndicator();
-            if (snapshot.connectionState == ConnectionState.done) _loadExtra();
-            // var dayList =
-            //     movieSesions.map((e) => e.day.toString()).toSet().toList();
-            var schedule = movieSesions
-                .where((data) => data.day.toLowerCase().contains(selectedDay))
-                .map((e) => e.schedule)
-                .toList();
-            // child:
+            if (snapshot.connectionState == ConnectionState.done) print('done');
+
             return Column(
               children: [
-                //_build days
                 _buildDates(),
-                //build schedule
-               _buildSchedule(),
-                //_buildSeats(),
+                SizedBox(
+                  height: 20,
+                ),
+                _buildSchedule(),
+                SizedBox(
+                  height: 10,
+                ),
                 _buildSeats(),
-                
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 50,
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18)),
+                          color: Colors.blue,
+                          onPressed: () {
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => BuyTicketsScreen()),
+                                (Route<dynamic> route) => false);
+                          },
+                          child: Text(
+                            "Completar Compra".toUpperCase(),
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
 
                 // OutlinedButton(
                 //   onPressed: () {},
@@ -99,29 +110,6 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
                 //     ),
                 //   )
                 // ),
-
-                // build days
-                // Container(
-                //   width: 60,
-                //   height: 60,
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(15),
-                //     color: Colors.white30,
-                //   ),
-                //   child: Text("1"),
-                // ),
-                // _buildDates(),
-                //SizedBox(height: 20.0),
-                //_buildSchedule(),
-                //SizedBox(height: 20.0),
-                //_loadData(),
-                //_buildSeats(),
-                // Positioned(
-                //   top: 30,
-                //   child: IconButton(
-                //     onPressed: () => Navigator.pop(context),
-                //     icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.green,)),
-                // )
               ],
             );
           }),
@@ -129,7 +117,10 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
   }
 
   Widget _buildDates() {
-    var dayList = movieSesions.map((e) => e.day.toString()).toSet().toList();
+    //var dayList = movieSesions.schedules.map((e) => e.day.toString()).toSet().toList();
+    List<String> dayList = [];
+    movieSesions.detailSessions.forEach(
+        (e) => dayList.add(e.schedules.map((e) => e.day.toString()).first));
 
     return Container(
       height: 60.0,
@@ -150,15 +141,16 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
         buttons: dayList,
       ),
     );
-    
   }
 
   Widget _buildSchedule() {
-    var scheduleList = movieSesions
-                .where((data) => data.day.toLowerCase().contains(selectedDay))
-                .map((e) => e.schedule)
-                .toList();
-    
+    List<String> scheduleList = [];
+    for (DetailSession d in movieSesions.detailSessions) {
+      d.schedules
+          .where((e) => e.day.toLowerCase().contains(selectedDay))
+          .forEach((e) => e.schedule.forEach((e) => scheduleList.add(e)));
+    }
+
     return Container(
       height: 30.0,
       child: GroupButton(
@@ -182,57 +174,31 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
   }
 
   Widget _buildSeats() {
+    var prueba = movieSesions.detailSessions
+        .map((e) => e.schedules.where((e) =>
+            e.day == selectedDay && e.schedule.contains(selectedSchedule)))
+        .first;
+    print('var prueba: ' + prueba.first.toString());
+
     return Container(
       height: 250,
-                  child: GridView.count(
-                    primary: false,
-                    padding: const EdgeInsets.all(20),
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10.0,
-                    crossAxisCount: 5,
-                    children: List.generate(12, (index) {
-                      return Padding(
-                          padding: const EdgeInsets.only(left: 5.0),
-                          child: Container(
-                            color:
-                                Column == buySeats ? Colors.red : Colors.black,
-                            height: 20,
-                            width: 20,
-                          ));
-                    }),
-                  ),
-                );
-      // child: Padding(
-      //   padding: const EdgeInsets.all(12.0),
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //     children: [
-      //       ...List.generate(int.parse(room.col), (Column) {
-      //         return Padding(
-      //           //padding: const EdgeInsets.all(5.0),
-      //           padding: const EdgeInsets.all(1.0),
-      //           child: Wrap(
-      //             direction: Axis.horizontal,
-      //             children: [
-      //               ...List.generate(int.parse(room.row), (Row) {
-      //                 print(Column);
-      //                 return Padding(
-      //                     padding: const EdgeInsets.only(left: 5.0),
-      //                     child: Container(
-      //                       color:
-      //                           Column == buySeats ? Colors.red : Colors.black,
-      //                       height: 30,
-      //                       width: 30,
-      //                     ));
-      //               }, growable: true)
-      //             ],
-      //           ),
-      //         );
-      //       }),
-      //     ],
-      //   ),
-      // ),
-    
+      child: GridView.count(
+        primary: false,
+        padding: const EdgeInsets.all(20),
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10.0,
+        crossAxisCount: 5,
+        children: List.generate(12, (index) {
+          return Padding(
+              padding: const EdgeInsets.only(left: 5.0),
+              child: Container(
+                color: Column == buySeats ? Colors.red : Colors.black,
+                height: 20,
+                width: 20,
+              ));
+        }),
+      ),
+    );
   }
 
   Widget _chip(String data, BuildContext context) => ChoiceChip(

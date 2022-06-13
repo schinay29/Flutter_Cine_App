@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:cine_view/backend/constants.dart';
 import 'package:cine_view/models/Actor.dart';
-import 'package:cine_view/models/RoomMovie.dart';
+import 'package:cine_view/models/Payment.dart';
+import 'package:cine_view/models/Session.dart';
 import 'package:http/http.dart';
 
 import '../models/Movie.dart';
@@ -23,22 +24,37 @@ class CineService {
     return movies;
   }
 
-  // Future<User> getUser(int id) async {
-  //   Response res = await get(Uri.parse('$apiUrl/User/2'));
+  Future<User?> getUser(String email, String password ) async {
+    Response res = await post(Uri.parse('$apiUrl/User/${email}/${password}'));
+    if(res.statusCode != 200) return null;
+    return User.fromJson(json.decode(res.body));
+  }
 
-  //   if (res.statusCode != 200) return User.fromJson(json.decode(res.body));
-  // }
+  Future<User?> saveUser(String email, String password) async {
+    Response res = await post(
+    Uri.parse('$apiUrl/User'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'Email': email,
+        'Password': password,
+        'Rol': 'user'
+      }),
+    );
+    if(res.statusCode != 200) return null;
+    return User.fromJson(jsonDecode(res.body));
+  }
 
-  Future<List<RoomMovie>> getSession(int movieId) async {
+  Future<Sessions> getSession(int movieId) async {
     final res = await get(Uri.parse('$apiUrl/RoomMovie/GetList/${movieId}'));
     print("in session ");
     //if(res.statusCode != 200) return new List.empty();
-     return (json.decode(res.body) as List)
-      .map((data) => RoomMovie.fromJson(data))
-      .toList();
+    return Sessions.fromJson(json.decode(res.body));
+    //  return (json.decode(res.body) as List)
+    //   .map((data) => Sessions.fromJson(data));
   }
 
-  
   Future<Room> getRoomSeat(int roomId) async {
     var res = await get(Uri.parse('$apiUrl/Room/${roomId}')); 
     print("in seats ");
@@ -61,5 +77,31 @@ class CineService {
       .map((data) => Actor.fromJson(data))
       .toList();
   } 
+
+  Future<List<Payment>?> getCards(int userId) async {
+    final res = await get(Uri.parse('$apiUrl/Payment/${userId}'));
+    return (json.decode(res.body) as List)
+      .map((data) => Payment.fromJson(data))
+      .toList();
+    //return null;
+  }
+
+  Future<Payment?> saveCard(Payment payment) async {
+    Response res = await post(
+    Uri.parse('$apiUrl/Payment'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'Name': payment.name,
+        'CardNumber': payment.cardNumber,
+        'Cvv': payment.cvv,
+        'UserId': payment.userId,
+        'Expiration': payment.expirationDate,
+      }),
+    );
+    if(res.statusCode != 200) return null;
+    return Payment.fromJson(jsonDecode(res.body));
+  }
 
 }

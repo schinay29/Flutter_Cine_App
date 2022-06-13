@@ -1,6 +1,6 @@
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Movie.dart';
-import 'package:cine_view/models/RoomMovie.dart';
+import 'package:cine_view/models/Session.dart';
 import 'package:cine_view/screens/moviedetail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';

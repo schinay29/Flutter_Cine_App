@@ -1,7 +1,7 @@
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Actor.dart';
 import 'package:cine_view/models/Movie.dart';
-import 'package:cine_view/models/RoomMovie.dart';
+import 'package:cine_view/models/Session.dart';
 import 'package:cine_view/screens/buyout/buyTickets_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -68,7 +68,7 @@ void initState() {
                   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
                   child: Icon(Icons.arrow_back_ios_new, color: Colors.amber, size: 16,),
                   ),
-                )              
+                )
           ),
           // movie details info
           Positioned(
