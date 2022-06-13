@@ -1,12 +1,7 @@
 import 'package:cine_view/Services/CineService.dart';
-import 'package:cine_view/models/Movie.dart';
-import 'package:cine_view/models/Session.dart';
-import 'package:cine_view/screens/moviedetail_screen.dart';
 import 'package:cine_view/screens/user/myCards_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class UserProfileScreen extends StatefulWidget {
   @override
@@ -14,7 +9,7 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  CineService _cineService = new CineService();
+  final CineService _cineService = CineService();
   // File? file;
   // ImagePicker image = ImagePicker();kkkkc
 
@@ -26,19 +21,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         // height: 200,
         child: Column(
           children: [
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             Text('Bienvenido', style: Theme.of(context).textTheme.headline4,),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             _buildProfileImg(),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             ProfileMenu(text: 'Editar Perfil', icon: Icons.person_outlined, press: () {}),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             //ProfileMenu(text: 'Mis pedidos', icon: Icons.event_seat_rounded,press: () {})
             ProfileMenu(text: 'Mis tarjetas', icon: Icons.payment, press: () { Navigator.push(
               context, MaterialPageRoute(builder: (context) => MyCardsScreen()),);}),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             ProfileMenu(text: 'Mis pedidos', icon: Icons.shopping_cart_outlined, press: () {}),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             ProfileMenu(text: 'Cerrar Sesión', icon: Icons.logout, press: () {}),
           ],
         )
@@ -92,10 +87,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           height: 115,
           width: 115,
           child: Stack(
-            fit: StackFit.expand,
-            overflow: Overflow.visible,
+            clipBehavior: Clip.none, fit: StackFit.expand,
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 backgroundImage:
                     NetworkImage('https://picsum.photos/250?image=9'),
               ),
@@ -114,7 +108,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         onTap: () {
                           getGallery();
                         },
-                        child: SizedBox(width: 56, height: 56, child: Icon(Icons.camera_alt_rounded)),
+                        child: const SizedBox(width: 56, height: 56, child: Icon(Icons.camera_alt_rounded)),
                         ),
                       ),
                     ),
@@ -156,16 +150,16 @@ class ProfileMenu extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: FlatButton(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           color: Colors.grey.shade200,
           onPressed: press,
           child: Row(
             children: [
               Icon(icon),
-              SizedBox(width: 25,),
+              const SizedBox(width: 25,),
               Expanded(child: Text(text, style: Theme.of(context).textTheme.bodyText1)),
-              Icon(Icons.arrow_forward_ios),
+              const Icon(Icons.arrow_forward_ios),
             ]
           ),
         ),

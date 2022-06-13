@@ -1,11 +1,8 @@
+
 import 'package:cine_view/Services/CineService.dart';
-import 'package:cine_view/models/Movie.dart';
-import 'package:cine_view/models/Session.dart';
-import 'package:cine_view/screens/moviedetail_screen.dart';
+import 'package:cine_view/models/Payment.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/services.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class MyCardsScreen extends StatefulWidget {
   @override
@@ -13,8 +10,10 @@ class MyCardsScreen extends StatefulWidget {
 }
 
 class _MyCardsScreenState extends State<MyCardsScreen> {
-  CineService _cineService = new CineService();
-  List<Object?> cards = [];
+  final CineService _cineService = CineService();
+  var cardNumberMask = MaskTextInputFormatter(mask: '####  ####  ####  ####', filter: { "#": RegExp(r'[0-9]') });
+  var cardDateMask = MaskTextInputFormatter(mask: '##-##', filter: { "#": RegExp(r'[0-9]') });
+  var cardCvvMask = MaskTextInputFormatter(mask: '###', filter: { "#": RegExp(r'[0-9]') });
   final cardName = TextEditingController();
   final cardNumber = TextEditingController();
   final cardCvv = TextEditingController();
@@ -24,66 +23,29 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        //padding: const EdgeInsets.only(right: 15.0, bottom: 20.0, top: 20.0),
-        // height: 200,
-        // child: FutureBuilder(
-        //   // future: _cineService.getSession(2),
-        //   future: _cineService.getMovies(),
-        //   builder: (context,  AsyncSnapshot<List<Movie>> snapshot) {
-        //     while (snapshot.connectionState == ConnectionState.waiting)
-        //       return CircularProgressIndicator();
-        //     if (snapshot.connectionState == ConnectionState.done){
-        //       if (snapshot.hasData) {
-        //         if (snapshot.data != null) movies = snapshot.data!;
-        //       }
-        //     }
-        //     return Column(
-        //       children: [
-        //         _buildRecentMovies(),
-        //         _buildPageIndicator(),
-        //         SizedBox(height: 40,),
-        //         SingleChildScrollView(
-        //           scrollDirection: Axis.horizontal,
-
-        //         child: Row(
-
-        //           children: List.generate(movies.length, ((index) => _buildAllMovies(movies[index]))),
-        //         )
-
-        //         )
-        //       ],
-        //     );
-        // },)
         reverse: true,
 
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 25,
             ),
-            Text(
+            const Text(
               'Mis Tarjetas',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Divider(),
-            SizedBox(
+            const Divider(),
+            const SizedBox(
               height: 12,
             ),
-            _buildCards(),
-            SizedBox(
+            _buildCard(),
+            const SizedBox(
               height: 10,
             ),
-            // Container(
-            //   margin: EdgeInsets.only(left: 20),
-            //   alignment: Alignment.topLeft,
-            //   child: Text('AÑADIR TARJETA', style: TextStyle(fontSize: 18, color: Colors.grey.shade600), textAlign: TextAlign.end,),
-            //   // child: Text('hola'),
-            // ),
-            // Divider(),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
 
@@ -92,13 +54,15 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                 paddingRight: 15,
                 hintText: 'Propietario de la tarjeta',
                 inputType: TextInputType.name,
-                controller: cardName),
+                controller: cardName, 
+                mask: MaskTextInputFormatter()),
             _buildTextField(
                 paddingLeft: 15,
                 paddingRight: 15,
                 hintText: 'Número de la tarjeta',
                 inputType: TextInputType.number,
-                controller: cardNumber),
+                controller: cardNumber,
+                mask: cardNumberMask),
             Row(
               children: [
                 Expanded(
@@ -107,7 +71,8 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                       paddingRight: 10,
                       hintText: 'Fecha caducidad',
                       inputType: TextInputType.datetime,
-                      controller: cardExpiration),
+                      controller: cardExpiration,
+                      mask: cardDateMask),
                 ),
                 Expanded(
                   child: _buildTextField(
@@ -115,14 +80,15 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                       paddingRight: 15,
                       hintText: 'CVV',
                       inputType: TextInputType.number,
-                      controller: cardCvv),
+                      controller: cardCvv,
+                      mask: cardCvvMask),
                 ),
               ],
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 35,
                 ),
                 Expanded(
@@ -133,6 +99,12 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                           borderRadius: BorderRadius.circular(18)),
                       color: Colors.blue,
                       onPressed: () {
+                        var currentUser = 1;
+                        var valuesDate = cardExpiration.text.split('-');
+                        var date = '20' + valuesDate[1] + '-' + valuesDate[0] + '-01';
+                        var number = cardNumber.text.replaceAll('  ', '');
+                        print(date);
+                        saveCard(Payment(cardName.text, int.parse(number), int.parse(cardCvv.text), currentUser, DateTime.parse(date)));
                         print('card payment object: '+ cardName.text);
                         // Navigator.of(context).pushAndRemoveUntil(
                         //   MaterialPageRoute(builder: (context) => BuyTicketsScreen()),
@@ -141,7 +113,7 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                       },
                       child: Text(
                         "Añadir método de pago".toUpperCase(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
                             color: Colors.white),
@@ -149,7 +121,7 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 35,
                 )
               ],
@@ -161,78 +133,43 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
     );
   }
 
-  // Widget _buildCards() {
-  //   return CarouselSlider(
-  //     options: CarouselOptions(height: 250.0,
-  //     aspectRatio: 16/9,
-  //     viewportFraction: 0.6,
-  //     enlargeCenterPage: true,
-  //      onPageChanged: ( index, reason ) => {
-  //               print(index),
-  //               // setState(() {
-  //               // _currentPage = index;
+  saveCard(Payment payment) {
 
-  //               // })
-  //           },),
-  //     items: cards.map((i) {
-  //       return Builder(
-  //         builder: (BuildContext context) {
-  //           return Container(
-  //             //width: 200,
-  //             width: MediaQuery.of(context).size.width,
-  //             margin: EdgeInsets.symmetric(horizontal: 0),
-  //             decoration: BoxDecoration(
-  //               image:DecorationImage(
-  //               fit: BoxFit.cover
-  //               ),
-  //               color: Colors.amber,
-  //               borderRadius: BorderRadius.circular(10.0)),
-  //             child: GestureDetector(
-  //                       onTap: () {
-  //                         //print('tap '+ i.movieId.toString());
+  }
 
-  //                         Navigator.of(context).pushAndRemoveUntil(
-  //                           MaterialPageRoute(builder: (context) => DetailScreen(i)),
-  //                           (Route<dynamic> route) => false);
-  //                       }
-  //             )
-  //           );
-  //         },
-  //       );
-  //     }).toList(),
-  //   );
-  // }
-
-  Widget _buildCards() {
-    var fourLastDigits = '4444';
+  Widget _buildCard() {
     return Container(
       height: 195,
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
       width: double.infinity,
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        gradient: SweepGradient(
-          center: AlignmentDirectional(1, -1),
-          startAngle: 1.7,
-          endAngle: 3,
-          colors: const <Color>[
-            Color(0xff148535),
-            Color(0xff148535),
-            Color(0xff0D6630),
-            Color(0xff0D6630),
-            Color(0xff148535),
-            Color(0xff148535),
-          ],
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[Color(0xff323232), Color(0xff000000)],
         ),
       ),
-      child: Column(
+      child: cardFront(),
+      // child: Transform(
+      //   transform: Matrix4.identity()
+      //   ..setEntry(3,2,0.001)
+      //   ..rotateY(pi/ 180 * 360),
+      
+      //   child: cardFront(),
+      // ),
+    );
+  }
+
+  Widget cardFront(){
+        return Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: const [
               Text(
                 'VISA',
                 style: TextStyle(
@@ -250,9 +187,9 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
             ],
           ),
           Text(
-            "\t****\t\t****\t\t****\t\t****\t\t ${fourLastDigits}",
-            style: TextStyle(
-                fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
+            (cardNumber.text != '')? cardNumber.text : "\t****\t\t****\t\t****\t\t****\t\t****",
+            style: const TextStyle(
+                fontSize: 26, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 197, 188, 188)),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,16 +201,16 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Titular tarjeta',
                           style: TextStyle(fontSize: 12, color: Colors.white),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          'nOMBRE TITULAR',
-                          style: TextStyle(fontSize: 12, color: Colors.white),
+                          cardName.text,
+                          style: const TextStyle(fontSize: 12, color: Colors.white),
                         ),
                       ],
                     ),
@@ -282,16 +219,16 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Fecha caducidad',
                           style: TextStyle(fontSize: 12, color: Colors.white),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          'insertar fecha caducidad',
-                          style: TextStyle(fontSize: 12, color: Colors.white),
+                          (cardExpiration.text != '')? cardExpiration.text : 'MM/AA',
+                          style: const TextStyle(fontSize: 12, color: Colors.white),
                         ),
                       ],
                     ),
@@ -301,8 +238,7 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
             ],
           ),
         ],
-      ),
-    );
+      );
   }
 
   Widget _buildTextField(
@@ -310,7 +246,8 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
       required double paddingRight,
       required String hintText,
       required TextInputType inputType, 
-      required TextEditingController controller}) {
+      required TextEditingController controller,
+      required MaskTextInputFormatter mask}) {
     return Container(
       margin: EdgeInsets.only(
         bottom: 20,
@@ -328,7 +265,11 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide.none)),
         keyboardType: inputType,
+        inputFormatters: [mask],
         controller: controller,
+        onChanged:(value) {
+          setState(() { });
+        },
       ),
     );
   }

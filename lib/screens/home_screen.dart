@@ -1,6 +1,5 @@
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Movie.dart';
-import 'package:cine_view/models/Session.dart';
 import 'package:cine_view/screens/moviedetail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -13,9 +12,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  CineService _cineService = new CineService();
+  final CineService _cineService = CineService();
    List<Movie> movies = [];
-   int _currentPage = 0;
+   final int _currentPage = 0;
    
 
   @override
@@ -28,8 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
           // future: _cineService.getSession(2),
           future: _cineService.getMovies(),
           builder: (context,  AsyncSnapshot<List<Movie>> snapshot) {
-            while (snapshot.connectionState == ConnectionState.waiting)
-              return CircularProgressIndicator();
+            while (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
             if (snapshot.connectionState == ConnectionState.done){
               if (snapshot.hasData) {
                 if (snapshot.data != null) movies = snapshot.data!;
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 _buildRecentMovies(),
                 _buildPageIndicator(), 
-                SizedBox(height: 40,),
+                const SizedBox(height: 40,),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                 
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return Container(
               //width: 200,
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.symmetric(horizontal: 0),
+              margin: const EdgeInsets.symmetric(horizontal: 0),
               decoration: BoxDecoration(
                 image:DecorationImage(
                 image: NetworkImage(i.img),
@@ -98,9 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           print('tap '+ i.movieId.toString());
                           
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (context) => DetailScreen(i)),
-                            (Route<dynamic> route) => false);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DetailScreen(i)),);
                         }
 
                         // Navigator.push(
@@ -117,13 +117,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildPageIndicator() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
       child: AnimatedSmoothIndicator(
         activeIndex: _currentPage,
         //activeIndex: 1,
         count: movies.length,
         //count: 5,
-        effect: ExpandingDotsEffect(
+        effect: const ExpandingDotsEffect(
           activeDotColor: Color.fromRGBO(0, 0, 0, 0.9),
           dotWidth: 8,
           dotHeight: 8),
@@ -139,14 +139,14 @@ class _HomeScreenState extends State<HomeScreen> {
         // ARREGLAR FIT
         //imagen
         Container(
-          margin: EdgeInsets.only( top: 10, left: 15),
+          margin: const EdgeInsets.only( top: 10, left: 15),
           width: 120,
           height: 180,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(image: NetworkImage(movie.img)),
             color: Colors.white38,
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 offset: Offset(0, 10),
                 blurRadius: 50,

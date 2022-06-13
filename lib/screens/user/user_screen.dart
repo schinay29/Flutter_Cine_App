@@ -1,10 +1,8 @@
 import 'package:cine_view/Services/CineService.dart';
-import 'package:cine_view/main.dart';
 import 'package:cine_view/models/User.dart';
 import 'package:cine_view/screens/user/userProfile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import '../home_screen.dart';
 
 
 // const users = const {
@@ -16,15 +14,15 @@ import '../home_screen.dart';
 
 class UserScreen extends StatelessWidget {
 
-  CineService _cineService = new CineService();
+  final CineService _cineService = CineService();
   User? user;
 
-  Duration get loginTime => Duration(milliseconds: 2250);
+  Duration get loginTime => const Duration(milliseconds: 2250);
 
   Future<String?> _authUser(LoginData data) {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(loginTime).then((_) async {
-      await this._cineService.getUser(data.name, data.password).then((value) => {user = value, print(value)});
+      await _cineService.getUser(data.name, data.password).then((value) => {user = value, print(value)});
       if(user == null) return 'Usuario o contraseña incorrecta';
       // Navigator.push(BuildContext context,MaterialPageRoute(builder: (context) => const UserProfileScreen()),);
       return null;
@@ -35,7 +33,7 @@ class UserScreen extends StatelessWidget {
     debugPrint('Signup Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(loginTime).then((_) async {
       if(data.name == null && data.password == null) return 'Completar todos los campos';
-        await this._cineService.saveUser(data.name.toString(), data.password.toString()).then((value) => {user = value, print(value)});
+        await _cineService.saveUser(data.name.toString(), data.password.toString()).then((value) => {user = value, print(value)});
       if(user == null) return 'Registro fallido';
       return null;
     });
@@ -75,7 +73,9 @@ class UserScreen extends StatelessWidget {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => UserProfileScreen(),
         ));
-      }, onRecoverPassword: (String ) {  },
+      }, onRecoverPassword: (String ) {
+        return null;
+        },
     );
   }
 }

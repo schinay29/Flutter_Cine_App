@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 
 class MovieDetailHeader extends StatelessWidget {
-  MovieDetailHeader(this.movie);
+  const MovieDetailHeader(this.movie);
   final Movie movie;
 
   @override

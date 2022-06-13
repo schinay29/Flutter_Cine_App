@@ -25,7 +25,7 @@ class CineService {
   }
 
   Future<User?> getUser(String email, String password ) async {
-    Response res = await post(Uri.parse('$apiUrl/User/${email}/${password}'));
+    Response res = await post(Uri.parse('$apiUrl/User/$email/$password'));
     if(res.statusCode != 200) return null;
     return User.fromJson(json.decode(res.body));
   }
@@ -47,7 +47,7 @@ class CineService {
   }
 
   Future<Sessions> getSession(int movieId) async {
-    final res = await get(Uri.parse('$apiUrl/RoomMovie/GetList/${movieId}'));
+    final res = await get(Uri.parse('$apiUrl/RoomMovie/GetList/$movieId'));
     print("in session ");
     //if(res.statusCode != 200) return new List.empty();
     return Sessions.fromJson(json.decode(res.body));
@@ -56,7 +56,7 @@ class CineService {
   }
 
   Future<Room> getRoomSeat(int roomId) async {
-    var res = await get(Uri.parse('$apiUrl/Room/${roomId}')); 
+    var res = await get(Uri.parse('$apiUrl/Room/$roomId')); 
     print("in seats ");
     //if(res.statusCode != 200) return new List.empty();
     // += await get(Uri.parse('$apiUrl/Seat/GetBySession/${sessionId}'));
@@ -65,21 +65,21 @@ class CineService {
   }
 
   Future<List<int>> getBuySeats(int sessionId) async {
-    final res = await get(Uri.parse('$apiUrl/Seat/GetBySession/${sessionId}'));
+    final res = await get(Uri.parse('$apiUrl/Seat/GetBySession/$sessionId'));
     List<int> buyseats = [];
     (jsonDecode(res.body) as List).map((e) => buyseats.add(e)).toList();
     return buyseats;
   } 
 
   Future<List<Actor>> getCast(int movieId) async {
-    final res = await get(Uri.parse('$apiUrl/Cast/${movieId}'));
+    final res = await get(Uri.parse('$apiUrl/Cast/$movieId'));
      return (json.decode(res.body) as List)
       .map((data) => Actor.fromJson(data))
       .toList();
   } 
 
   Future<List<Payment>?> getCards(int userId) async {
-    final res = await get(Uri.parse('$apiUrl/Payment/${userId}'));
+    final res = await get(Uri.parse('$apiUrl/Payment/$userId'));
     return (json.decode(res.body) as List)
       .map((data) => Payment.fromJson(data))
       .toList();

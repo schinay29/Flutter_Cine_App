@@ -10,6 +10,7 @@ class MovieDetailScreen extends StatefulWidget {
 
 class _MovieDetailScreenState extends State<MovieDetailScreen> {
   bool isLoading = false;
+  @override
   void initState() {
     super.initState();
   }

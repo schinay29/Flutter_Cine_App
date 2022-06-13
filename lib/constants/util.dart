@@ -1,11 +1,10 @@
 import 'package:cine_view/screens/movies/List.dart';
 import 'package:flutter/material.dart';
-import 'package:cine_view/screens/home_screen.dart';
 import 'package:cine_view/theme/theme_colors.dart';
 
 showMessage(BuildContext context, String contentMessage) {
   Widget yesButton = FlatButton(
-    child: Text("OK", style: TextStyle(color: primary)),
+    child: const Text("OK", style: TextStyle(color: primary)),
     onPressed: () {
       Navigator.pop(context);
 
@@ -17,7 +16,7 @@ showMessage(BuildContext context, String contentMessage) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("Message"),
+    title: const Text("Message"),
     content: Text(contentMessage),
     actions: [
       yesButton,

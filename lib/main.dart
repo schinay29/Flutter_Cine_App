@@ -1,9 +1,4 @@
-import 'package:cine_view/screens/buyout/buyTickets_screen.dart';
-import 'package:cine_view/screens/buyout/payment_screen.dart';
 import 'package:cine_view/screens/home_screen.dart';
-import 'package:cine_view/screens/movies/List.dart';
-import 'package:cine_view/screens/user/myCards_screen.dart';
-import 'package:cine_view/screens/user/userProfile_screen.dart';
 import 'package:cine_view/screens/user/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,10 +13,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _indexPage = 0;
   // List<Widget> _screens = [ListMovie(), BuyTicketsScreen()];
-  List<Widget> _screens = [HomeScreen(),  UserProfileScreen()];
+  final List<Widget> _screens = [HomeScreen(),  UserScreen()];
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     print("pruebaaa");
     return MaterialApp(
       // initialRoute: '/main',
@@ -42,11 +37,11 @@ class _MyAppState extends State<MyApp> {
               _indexPage = index;
             });
           },
-          unselectedItemColor: Color.fromARGB(137, 126, 124, 124),
+          unselectedItemColor: const Color.fromARGB(137, 126, 124, 124),
           showUnselectedLabels: true,
           selectedItemColor: Colors.blue,
           currentIndex: _indexPage,
-          items: [
+          items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
             // BottomNavigationBarItem(
             //     icon: Icon(Icons.scale_sharp), label: "Promociones"),

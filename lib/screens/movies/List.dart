@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'package:cine_view/constants/util.dart';
 import 'package:cine_view/models/Movie.dart';
 import 'package:cine_view/screens/movies/Detail.dart';
 // import 'package:cine_view/screens/movies/Detail.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cine_view/constants/base_api.dart';
-import 'package:cine_view/theme/theme_colors.dart';
 import 'package:http/http.dart' as http;
 
 class ListMovie extends StatefulWidget {
@@ -22,7 +19,7 @@ class _ListMovieState extends State<ListMovie> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    this.loadMovies();
+    loadMovies();
   }
 
   loadMovies() async {
@@ -56,7 +53,7 @@ class _ListMovieState extends State<ListMovie> {
 
   Widget getBody() {
     if (movies.isEmpty|| isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
     return ListView.builder(
         itemCount: movies.length,
@@ -79,7 +76,7 @@ class _ListMovieState extends State<ListMovie> {
         }, //Add this as well
         child: Row(
           children: <Widget>[
-            Container(height: 180,width:180 , child: Image.network(item.img, fit: BoxFit.cover)),
+            SizedBox(height: 180,width:180 , child: Image.network(item.img, fit: BoxFit.cover)),
             Expanded(
               child: Ink(
                 height: 180,
@@ -88,9 +85,9 @@ class _ListMovieState extends State<ListMovie> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(item.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Expanded(child: Text(item.description))
                   ],
                 ),

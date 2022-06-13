@@ -1,10 +1,5 @@
 import 'package:cine_view/Services/CineService.dart';
-import 'package:cine_view/models/Movie.dart';
-import 'package:cine_view/models/Session.dart';
-import 'package:cine_view/screens/moviedetail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 
 class PaymentScreen extends StatefulWidget {
@@ -13,7 +8,7 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  CineService _cineService = new CineService();
+  final CineService _cineService = CineService();
   List<Object?> cards = [];
 
   @override
@@ -54,13 +49,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
         child: Column(
           children: [
-            SizedBox(height: 20,),
-            Text('Finalizar Compra', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-            SizedBox(height: 7,),
-            Divider(),
-            SizedBox(height: 7,),
+            const SizedBox(height: 20,),
+            const Text('Finalizar Compra', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+            const SizedBox(height: 7,),
+            const Divider(),
+            const SizedBox(height: 7,),
             _buildCards(),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             _orderDetail(),
           ],
         ),
@@ -114,16 +109,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
     var fourLastDigits = '4444';
     return Container(
       height: 195,
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
       width: double.infinity,
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        gradient: SweepGradient(
+        gradient: const SweepGradient(
           center: AlignmentDirectional(1, -1),
           startAngle: 1.7,
           endAngle: 3,
-          colors: const <Color>[
+          colors: <Color>[
             Color(0xff148535),
             Color(0xff148535),
             Color(0xff0D6630),
@@ -139,12 +134,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: const [
               Text('VISA', style: TextStyle(fontSize: 24.30, fontWeight: FontWeight.bold, color: Colors.white),), 
               Text('Visa electrónica', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),), 
             ],
           ),
-          Text("\t****\t\t****\t\t****\t\t****\t\t ${fourLastDigits}", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),), 
+          Text("\t****\t\t****\t\t****\t\t****\t\t $fourLastDigits", style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),), 
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -154,7 +149,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text('Titular tarjeta', style: TextStyle(fontSize: 12, color: Colors.white),),
                         SizedBox(height: 10,),
                         Text('nOMBRE TITULAR', style: TextStyle(fontSize: 12, color: Colors.white),),
@@ -164,7 +159,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text('Fecha caducidad', style: TextStyle(fontSize: 12, color: Colors.white),),
                         SizedBox(height: 10,),
                         Text('insertar fecha caducidad', style: TextStyle(fontSize: 12, color: Colors.white),),
@@ -183,17 +178,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
  Widget _orderDetail() {
 
        return Container(
-          padding: EdgeInsets.only(left: 20, right: 20, top:20),
+          padding: const EdgeInsets.only(left: 20, right: 20, top:20),
           alignment: Alignment.topLeft,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Detalles del pedido', style: TextStyle(fontSize: 20, color: Colors.grey.shade600)),
-                  SizedBox(height: 10,),
-                  Text('NOMBRE PELICULA'),
-                  Text('Cine'),
-                  Text('Fecha pedido'),
-                  Text('Sala numero'),
+                  const SizedBox(height: 10,),
+                  const Text('NOMBRE PELICULA'),
+                  const Text('Cine'),
+                  const Text('Fecha pedido'),
+                  const Text('Sala numero'),
                 ]
             )
        );

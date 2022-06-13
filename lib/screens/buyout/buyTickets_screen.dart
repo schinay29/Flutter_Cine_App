@@ -1,11 +1,8 @@
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Movie.dart';
-import 'package:cine_view/models/Room.dart';
 import 'package:cine_view/models/Session.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:group_button/group_button.dart';
-import 'dart:convert';
 
 class BuyTicketsScreen extends StatefulWidget {
   @override
@@ -13,9 +10,9 @@ class BuyTicketsScreen extends StatefulWidget {
 }
 
 class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
-  CineService _cineService = new CineService();
+  final CineService _cineService = CineService();
   Sessions movieSesions =
-      new Sessions(new Movie(0, '', '', '', 0, '', '', 0), []);
+      Sessions(Movie(0, '', '', '', 0, '', '', 0), []);
   List<int> buySeats = [];
   int movieId = 1;
   String selectedDay = 'lunes';
@@ -50,26 +47,27 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.topCenter,
-      padding: EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(15.0),
       child: FutureBuilder<dynamic>(
           future: _loadData(),
           builder: (context, snapshot) {
-            while (snapshot.connectionState == ConnectionState.waiting)
-              return CircularProgressIndicator();
+            while (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
             if (snapshot.connectionState == ConnectionState.done) print('done');
 
             return Column(
               children: [
                 _buildDates(),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 _buildSchedule(),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 _buildSeats(),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     Expanded(
@@ -87,7 +85,7 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
                           },
                           child: Text(
                             "Completar Compra".toUpperCase(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
@@ -119,10 +117,11 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
   Widget _buildDates() {
     //var dayList = movieSesions.schedules.map((e) => e.day.toString()).toSet().toList();
     List<String> dayList = [];
-    movieSesions.detailSessions.forEach(
-        (e) => dayList.add(e.schedules.map((e) => e.day.toString()).first));
+    for (var e in movieSesions.detailSessions) {
+      dayList.add(e.schedules.map((e) => e.day.toString()).first);
+    }
 
-    return Container(
+    return SizedBox(
       height: 60.0,
       child: GroupButton(
         isRadio: true,
@@ -151,7 +150,7 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
           .forEach((e) => e.schedule.forEach((e) => scheduleList.add(e)));
     }
 
-    return Container(
+    return SizedBox(
       height: 30.0,
       child: GroupButton(
         isRadio: true,
@@ -179,7 +178,7 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
             e.day == selectedDay && e.schedule.contains(selectedSchedule)))
         .first;
 
-    return Container(
+    return SizedBox(
       height: 250,
       child: GridView.count(
         primary: false,
@@ -201,7 +200,7 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
   }
 
   Widget _chip(String data, BuildContext context) => ChoiceChip(
-        labelPadding: EdgeInsets.all(2.0),
+        labelPadding: const EdgeInsets.all(2.0),
         label: Text(
           data,
           style: Theme.of(context)
@@ -212,6 +211,6 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
         selectedColor: Colors.deepPurple,
         selected: true,
         elevation: 1,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
       );
 }
