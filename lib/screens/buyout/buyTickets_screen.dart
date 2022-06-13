@@ -5,22 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
 
 class BuyTicketsScreen extends StatefulWidget {
-  @override
-  State<BuyTicketsScreen> createState() => _BuyTicketsScreenState();
+  _BuyTicketsScreenState createState() => _BuyTicketsScreenState();
 }
 
 class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
+  bool isLoading = false;
   final CineService _cineService = CineService();
-  Sessions movieSesions =
-      Sessions(Movie(0, '', '', '', 0, '', '', 0), []);
+  Sessions movieSesions = Sessions(Movie(0, '', '', '', 0, '', '', 0), []);
   List<int> buySeats = [];
   int movieId = 1;
   String selectedDay = 'lunes';
   String selectedSchedule = '20:00';
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -30,87 +27,70 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
         .then((value) => {movieSesions = value});
   }
 
-  _loadExtra() async {
-    print('in loadextra()');
-    //if (this.movieSesions.length == 0) return print('failed');
-    // await _cineService
-    //     .getRoomSeat(movieSesions[0].roomId)
-    //     .then((value) => {room = value});
-    //     print('roomcol: ' + room.col.toString());
-    // await _cineService
-    //     .getBuySeats(movieSesions[0].id)
-    //     .then((value) => buySeats = value);
-    //     print('buyseats: ' + buySeats.length.toString());
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.topCenter,
-      padding: const EdgeInsets.all(15.0),
-      child: FutureBuilder<dynamic>(
-          future: _loadData(),
-          builder: (context, snapshot) {
-            while (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            }
-            if (snapshot.connectionState == ConnectionState.done) print('done');
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: FutureBuilder<dynamic>(
+            future: _loadData(),
+            builder: (context, snapshot) {
+              while (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              }
+              if (snapshot.connectionState == ConnectionState.done)
+                print('done');
 
-            return Column(
-              children: [
-                _buildDates(),
-                const SizedBox(
-                  height: 20,
-                ),
-                _buildSchedule(),
-                const SizedBox(
-                  height: 10,
-                ),
-                _buildSeats(),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 50,
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18)),
-                          color: Colors.blue,
-                          onPressed: () {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => BuyTicketsScreen()),
-                                (Route<dynamic> route) => false);
-                          },
-                          child: Text(
-                            "Completar Compra".toUpperCase(),
-                            style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+              return Column(
+                children: [
+                  _buildDates(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  _buildSchedule(),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _buildSeats(),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+                          child: FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18)),
+                            color: Colors.blue,
+                            onPressed: () {},
+                            child: Text(
+                              "Completar Compra".toUpperCase(),
+                              style: const TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
-                // OutlinedButton(
-                //   onPressed: () {},
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: Column(
-                //       children: [
-                //         Text("hola"),
-                //         Text(dayList[0])
-                //       ],
-                //     ),
-                //   )
-                // ),
-              ],
-            );
-          }),
+                  // OutlinedButton(
+                  //   onPressed: () {},
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(8.0),
+                  //     child: Column(
+                  //       children: [
+                  //         Text("hola"),
+                  //         Text(dayList[0])
+                  //       ],
+                  //     ),
+                  //   )
+                  // ),
+                ],
+              );
+            }),
+      ),
     );
   }
 
