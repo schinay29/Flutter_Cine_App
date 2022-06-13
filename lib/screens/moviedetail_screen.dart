@@ -56,7 +56,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 child: GestureDetector(
                   onTap: () => {
                       print('taptaptap'),
-                      Navigator.of(context, rootNavigator: true).pop(context)
+                      //Navigator.of(context, rootNavigator: true).pop(context)
                      // Navigator.pop(globalContext)
                   },
                   child: Container(
@@ -173,6 +173,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   // Navigator.of(context).push(
                                   //   MaterialPageRoute(builder: (context) => BuyTicketsScreen()));
                                   //Navigator.pop(context);
+                                  
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => BuyTicketsScreen()),);
