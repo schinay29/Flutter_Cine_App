@@ -46,10 +46,10 @@ class CineService {
     return User.fromJson(jsonDecode(res.body));
   }
 
-  Future<Sessions> getSession(int movieId) async {
+  Future<Sessions?> getSession(int movieId) async {
     final res = await get(Uri.parse('$apiUrl/RoomMovie/GetList/$movieId'));
     print("in session ");
-    //if(res.statusCode != 200) return new List.empty();
+    if(res.statusCode != 200) return null;
     return Sessions.fromJson(json.decode(res.body));
     //  return (json.decode(res.body) as List)
     //   .map((data) => Sessions.fromJson(data));

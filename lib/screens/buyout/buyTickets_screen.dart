@@ -5,15 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
 
 class BuyTicketsScreen extends StatefulWidget {
+  final Movie movie;
+  const BuyTicketsScreen(this.movie);
   _BuyTicketsScreenState createState() => _BuyTicketsScreenState();
 }
 
 class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
-  bool isLoading = false;
+  //bool isLoading = false;
   final CineService _cineService = CineService();
-  Sessions movieSesions = Sessions(Movie(0, '', '', '', 0, '', '', 0), []);
+  Sessions? movieSesions;
   List<int> buySeats = [];
-  int movieId = 1;
   String selectedDay = 'lunes';
   String selectedSchedule = '20:00';
   @override
@@ -23,7 +24,7 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
 
   _loadData() async {
     await _cineService
-        .getSession(movieId)
+        .getSession(widget.movie.movieId)
         .then((value) => {movieSesions = value});
   }
 
@@ -97,7 +98,7 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
   Widget _buildDates() {
     //var dayList = movieSesions.schedules.map((e) => e.day.toString()).toSet().toList();
     List<String> dayList = [];
-    for (var e in movieSesions.detailSessions) {
+    for (var e in (movieSesions != null)? movieSesions!.detailSessions: []) {
       dayList.add(e.schedules.map((e) => e.day.toString()).first);
     }
 
@@ -124,7 +125,7 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
 
   Widget _buildSchedule() {
     List<String> scheduleList = [];
-    for (DetailSession d in movieSesions.detailSessions) {
+    for (DetailSession d in movieSesions!= null? movieSesions!.detailSessions: []) {
       d.schedules
           .where((e) => e.day.toLowerCase().contains(selectedDay))
           .forEach((e) => e.schedule.forEach((e) => scheduleList.add(e)));
@@ -153,10 +154,10 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
   }
 
   Widget _buildSeats() {
-    var prueba = movieSesions.detailSessions
-        .map((e) => e.schedules.where((e) =>
-            e.day == selectedDay && e.schedule.contains(selectedSchedule)))
-        .first;
+    // var prueba = movieSesions!.detailSessions
+    //     .map((e) => e.schedules.where((e) =>
+    //         e.day == selectedDay && e.schedule.contains(selectedSchedule)))
+    //     .first;
 
     return SizedBox(
       height: 250,

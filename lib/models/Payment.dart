@@ -13,6 +13,6 @@ class Payment {
         cardNumber = json['cardNumber'],
         cvv = json['cvv'],
         userId = json['userId'],
-        expirationDate = json['expiration'];
+        expirationDate = DateTime.parse(json['expiration']);
          
-}
+}           

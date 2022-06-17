@@ -1,4 +1,6 @@
-import 'package:cine_view/screens/home_screen.dart';
+import 'package:cine_view/models/Movie.dart';
+import 'package:cine_view/screens/buyout/order_screen.dart';
+import 'package:cine_view/screens/movies/home_screen.dart';
 import 'package:cine_view/screens/user/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +15,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _indexPage = 0;
   // List<Widget> _screens = [ListMovie(), BuyTicketsScreen()];
-  final List<Widget> _screens = [HomeScreen(),  UserScreen()];
+  final List<Widget> _screens = [HomeScreen(), OrderScreen(Movie(0, 'prueba', '', '', 120, '', '', 0)), UserScreen()];
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
@@ -43,6 +45,7 @@ class _MyAppState extends State<MyApp> {
           currentIndex: _indexPage,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: "Buscar"),
             // BottomNavigationBarItem(
             //     icon: Icon(Icons.scale_sharp), label: "Promociones"),
             // BottomNavigationBarItem(icon: Icon(Icons.search), label: "Buscar"),

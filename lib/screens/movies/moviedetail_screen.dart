@@ -15,7 +15,7 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   final CineService _cineService = CineService();
-  late Movie movie;
+  //late Movie movie;
   List<Actor> cast = [];
 
   @override
@@ -41,10 +41,10 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Container(
                 width: double.maxFinite,
                 // height: 350,
-                height: MediaQuery.of(context).size.height * 0.4,
+                height: MediaQuery.of(context).size.height * 0.42,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                         image: NetworkImage(widget.movie.img))),
               )),
           // back icon
@@ -61,12 +61,12 @@ class _DetailScreenState extends State<DetailScreen> {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)),
+                      color: Color.fromARGB(21, 0, 0, 0),
+                      borderRadius: BorderRadius.circular(12)),
                   child: const Icon(
                     Icons.arrow_back_ios_new,
-                    color: Colors.amber,
-                    size: 16,
+                    color: Colors.white,
+                    size: 18,
                   ),
                 ),
               )),
@@ -74,7 +74,7 @@ class _DetailScreenState extends State<DetailScreen> {
           Positioned(
               left: 0,
               right: 0,
-              top: MediaQuery.of(context).size.height * 0.38,
+              top: MediaQuery.of(context).size.height * 0.385,
               // top:imageSize ,
               child: Container(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -134,9 +134,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     ),
                     Text(widget.movie.description),
                     const SizedBox(
-                      height: 10,
+                      height: 16,
                     ),
-                    const Text('Cast'),
+                    const Text('Cast', style: TextStyle(fontSize: 16, color: Colors.black45)),
+                    SizedBox(height: 8,),
                     Wrap(
                       children: [
                         FutureBuilder<List<Actor>>(
@@ -149,12 +150,16 @@ class _DetailScreenState extends State<DetailScreen> {
                               if (snapshot.connectionState ==
                                   ConnectionState.done) cast = snapshot.data!;
                               return Wrap(
+                                
                                   children: List.generate(cast.length, (index) {
-                                return CircleAvatar(
-                                    radius: 25,
+                                    return SizedBox(
+                                      child: CircleAvatar(
+                                    radius: 26,
                                     backgroundColor: Colors.transparent,
                                     backgroundImage:
-                                        NetworkImage(cast[index].url));
+                                        NetworkImage(cast[index].url)),
+                                    );
+                                
                               }));
                             }),
                       ],
@@ -168,7 +173,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       // })
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 50,
                     ),
                     // bottom buttons
                     Row(
@@ -195,15 +200,10 @@ class _DetailScreenState extends State<DetailScreen> {
                                   borderRadius: BorderRadius.circular(18)),
                               color: Colors.blue,
                               onPressed: () {
-                                //Navigator.of(context).pop();
-                                //push failed, see error
-                                // Navigator.of(context).push(
-                                //   MaterialPageRoute(builder: (context) => BuyTicketsScreen()));
-                                //Navigator.pop(context);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => BuyTicketsScreen()),
+                                      builder: (context) => BuyTicketsScreen(widget.movie)),
                                 );
                                 //Navigator.pushNamed(context, '/second');
                               },

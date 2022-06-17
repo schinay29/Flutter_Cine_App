@@ -1,6 +1,6 @@
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Movie.dart';
-import 'package:cine_view/screens/moviedetail_screen.dart';
+import 'package:cine_view/screens/movies/moviedetail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -145,12 +145,12 @@ class _HomeScreenState extends State<HomeScreen> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(image: NetworkImage(movie.img)),
-            color: Colors.white38,
+            color: Colors.transparent,
             boxShadow: const [
               BoxShadow(
                 offset: Offset(0, 10),
                 blurRadius: 50,
-                color: Colors.black38,
+                color: Color.fromARGB(17, 0, 0, 0),
               ),
             ],
           ),
