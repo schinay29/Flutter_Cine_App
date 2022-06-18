@@ -9,51 +9,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 //   'dribbble@gmail.com': '12345',
 //   'hunter@gmail.com': 'hunter',
 // };
-class UserScreen extends StatefulWidget {
-  @override
-  _UserScreenState createState() => _UserScreenState();
-}
 
-class _UserScreenState extends State<UserScreen> {
+class UserScreen extends State {
+  late SharedPreferences logindata;
   final CineService _cineService = CineService();
   User? user;
-  Duration get loginTime => const Duration(milliseconds: 2250);
-
   bool isLoggedIn = false;
-  String name = '';
-  @override
-  void initState() {
-    super.initState();
-    autoLogIn();
-  }
 
-  void autoLogIn() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString('username');
-
-    if (userId != null && userId != '') {
-      debugPrint('User login Email' + userId);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => UserProfileScreen(),
-      ));
-      return;
-    }
-  }
+  Duration get loginTime => const Duration(milliseconds: 2250);
 
   Future<String?> _authUser(LoginData data) {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
-
     return Future.delayed(loginTime).then((_) async {
       await _cineService
           .getUser(data.name, data.password)
           .then((value) => {user = value, print(value)});
-      if (user == null) {
-        return 'Usuario o contraseña incorrecta';
-      }
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      if (user?.email != null && user?.email != '') {
-        prefs.setString('username', user!.email);
-      }
+      if (user == null) return 'Usuario o contraseña incorrecta';
       // Navigator.push(BuildContext context,MaterialPageRoute(builder: (context) => const UserProfileScreen()),);
       return null;
     });
@@ -67,15 +38,7 @@ class _UserScreenState extends State<UserScreen> {
       await _cineService
           .saveUser(data.name.toString(), data.password.toString())
           .then((value) => {user = value, print(value)});
-      if (user == null) {
-        return 'Registro fallido';
-      }
-
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      if (user?.email != null && user?.email != '') {
-        prefs.setString('username', user!.email);
-      }
-
+      if (user == null) return 'Registro fallido';
       return null;
     });
   }
