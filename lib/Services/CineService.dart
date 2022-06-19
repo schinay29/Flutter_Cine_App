@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cine_view/backend/constants.dart';
 import 'package:cine_view/models/Actor.dart';
+import 'package:cine_view/models/Order.dart';
 import 'package:cine_view/models/Payment.dart';
 import 'package:cine_view/models/Session.dart';
 import 'package:http/http.dart';
@@ -103,5 +104,41 @@ class CineService {
     if(res.statusCode != 200) return null;
     return Payment.fromJson(jsonDecode(res.body));
   }
+
+  Future<Order?> saveOrder(Order order) async {
+    Response res = await post(
+    Uri.parse('$apiUrl/Order'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'Quantity': order.quantity,
+        'Price': order.price,
+        'CreatedDate': order.createdDate,
+        'UserId': order.userId,
+      }),
+    );
+    if(res.statusCode != 200) return null;
+    return Order.fromJson(jsonDecode(res.body));
+  }
+
+
+  Future<dynamic> saveOrderSeat(int orderId, int seatId, double price) async {
+    Response res = await post(
+    Uri.parse('$apiUrl/OrderSeat'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'OrderId': orderId,
+        'SeatId': seatId,
+        'price': price,
+      }),
+    );
+    if(res.statusCode != 200) return null;
+    return 'successfully';
+  }
+
+  
 
 }
