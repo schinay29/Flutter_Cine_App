@@ -20,19 +20,19 @@ class CineService {
     List<dynamic> body = jsonDecode(res.body);
     List<Movie> movies =
         body.map((dynamic item) => Movie.fromJson(item)).toList();
-        print(movies);
+    print(movies);
     return movies;
   }
 
-  Future<User?> getUser(String email, String password ) async {
+  Future<User?> getUser(String email, String password) async {
     Response res = await post(Uri.parse('$apiUrl/User/$email/$password'));
-    if(res.statusCode != 200) return null;
+    if (res.statusCode != 200) return null;
     return User.fromJson(json.decode(res.body));
   }
 
   Future<User?> saveUser(String email, String password) async {
     Response res = await post(
-    Uri.parse('$apiUrl/User'),
+      Uri.parse('$apiUrl/User'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -42,26 +42,26 @@ class CineService {
         'Rol': 'user'
       }),
     );
-    if(res.statusCode != 200) return null;
+    if (res.statusCode != 200) return null;
     return User.fromJson(jsonDecode(res.body));
   }
 
   Future<Sessions?> getSession(int movieId) async {
     final res = await get(Uri.parse('$apiUrl/RoomMovie/GetList/$movieId'));
     print("in session ");
-    if(res.statusCode != 200) return null;
+    if (res.statusCode != 200) return null;
     return Sessions.fromJson(json.decode(res.body));
     //  return (json.decode(res.body) as List)
     //   .map((data) => Sessions.fromJson(data));
   }
 
   Future<Room> getRoomSeat(int roomId) async {
-    var res = await get(Uri.parse('$apiUrl/Room/$roomId')); 
+    var res = await get(Uri.parse('$apiUrl/Room/$roomId'));
     print("in seats ");
     //if(res.statusCode != 200) return new List.empty();
     // += await get(Uri.parse('$apiUrl/Seat/GetBySession/${sessionId}'));
-      return Room.fromJson(json.decode(res.body));
-     //return json.decode(res.body);
+    return Room.fromJson(json.decode(res.body));
+    //return json.decode(res.body);
   }
 
   Future<List<int>> getBuySeats(int sessionId) async {
@@ -69,26 +69,26 @@ class CineService {
     List<int> buyseats = [];
     (jsonDecode(res.body) as List).map((e) => buyseats.add(e)).toList();
     return buyseats;
-  } 
+  }
 
   Future<List<Actor>> getCast(int movieId) async {
     final res = await get(Uri.parse('$apiUrl/Cast/$movieId'));
-     return (json.decode(res.body) as List)
-      .map((data) => Actor.fromJson(data))
-      .toList();
-  } 
+    return (json.decode(res.body) as List)
+        .map((data) => Actor.fromJson(data))
+        .toList();
+  }
 
   Future<List<Payment>?> getCards(int userId) async {
     final res = await get(Uri.parse('$apiUrl/Payment/$userId'));
     return (json.decode(res.body) as List)
-      .map((data) => Payment.fromJson(data))
-      .toList();
+        .map((data) => Payment.fromJson(data))
+        .toList();
     //return null;
   }
 
   Future<Payment?> saveCard(Payment payment) async {
     Response res = await post(
-    Uri.parse('$apiUrl/Payment'),
+      Uri.parse('$apiUrl/Payment'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -97,11 +97,10 @@ class CineService {
         'CardNumber': payment.cardNumber,
         'Cvv': payment.cvv,
         'UserId': payment.userId,
-        'Expiration': payment.expirationDate,
+        'Expiration': payment.expirationDate.toIso8601String(),
       }),
     );
-    if(res.statusCode != 200) return null;
+    if (res.statusCode != 200) return null;
     return Payment.fromJson(jsonDecode(res.body));
   }
-
 }

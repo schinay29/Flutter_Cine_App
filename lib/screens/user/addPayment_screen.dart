@@ -1,6 +1,6 @@
-
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Payment.dart';
+import 'package:cine_view/screens/user/myCards_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -11,9 +11,12 @@ class AddPaymentScreen extends StatefulWidget {
 
 class _AddPaymentScreenState extends State<AddPaymentScreen> {
   final CineService _cineService = CineService();
-  var cardNumberMask = MaskTextInputFormatter(mask: '####  ####  ####  ####', filter: { "#": RegExp(r'[0-9]') });
-  var cardDateMask = MaskTextInputFormatter(mask: '##-##', filter: { "#": RegExp(r'[0-9]') });
-  var cardCvvMask = MaskTextInputFormatter(mask: '###', filter: { "#": RegExp(r'[0-9]') });
+  var cardNumberMask = MaskTextInputFormatter(
+      mask: '####  ####  ####  ####', filter: {"#": RegExp(r'[0-9]')});
+  var cardDateMask =
+      MaskTextInputFormatter(mask: '##-##', filter: {"#": RegExp(r'[0-9]')});
+  var cardCvvMask =
+      MaskTextInputFormatter(mask: '###', filter: {"#": RegExp(r'[0-9]')});
   final cardName = TextEditingController();
   final cardNumber = TextEditingController();
   final cardCvv = TextEditingController();
@@ -24,7 +27,6 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         reverse: true,
-
         child: Column(
           children: [
             const SizedBox(
@@ -54,7 +56,7 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
                 paddingRight: 15,
                 hintText: 'Propietario de la tarjeta',
                 inputType: TextInputType.name,
-                controller: cardName, 
+                controller: cardName,
                 mask: MaskTextInputFormatter()),
             _buildTextField(
                 paddingLeft: 15,
@@ -85,7 +87,9 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Row(
               children: [
                 const SizedBox(
@@ -101,11 +105,18 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
                       onPressed: () {
                         var currentUser = 1;
                         var valuesDate = cardExpiration.text.split('-');
-                        var date = '20' + valuesDate[1] + '-' + valuesDate[0] + '-01';
+                        var date =
+                            '20' + valuesDate[1] + '-' + valuesDate[0] + '-01';
                         var number = cardNumber.text.replaceAll('  ', '');
+                        print('testtttt:' + cardExpiration.text);
                         print(date);
-                        saveCard(Payment(cardName.text, int.parse(number), int.parse(cardCvv.text), currentUser, DateTime.parse(date)));
-                        print('card payment object: '+ cardName.text);
+                        saveCard(Payment(
+                            cardName.text,
+                            int.parse(number),
+                            int.parse(cardCvv.text),
+                            currentUser,
+                            DateTime.parse(date)));
+                        print('card payment object: ' + cardName.text);
                         // Navigator.of(context).pushAndRemoveUntil(
                         //   MaterialPageRoute(builder: (context) => BuyTicketsScreen()),
                         //   (Route<dynamic> route) => false);
@@ -133,8 +144,16 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
     );
   }
 
-  saveCard(Payment payment) {
-
+  saveCard(Payment payment) async {
+    print('Add Payment');
+    print(payment.cardNumber);
+    print(payment.cvv);
+    print(payment.expirationDate);
+    print(payment.name);
+    print(payment.userId);
+    await _cineService.saveCard(payment);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MyCardsScreen()));
   }
 
   Widget _buildCard() {
@@ -156,96 +175,104 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
       //   transform: Matrix4.identity()
       //   ..setEntry(3,2,0.001)
       //   ..rotateY(pi/ 180 * 360),
-      
+
       //   child: cardFront(),
       // ),
     );
   }
 
-  Widget cardFront(){
-        return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                'VISA',
-                style: TextStyle(
-                    fontSize: 24.30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              Text(
-                'Visa electrónica',
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ],
-          ),
-          Text(
-            (cardNumber.text != '')? cardNumber.text : "\t****\t\t****\t\t****\t\t****\t\t****",
-            style: const TextStyle(
-                fontSize: 26, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 197, 188, 188)),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Titular tarjeta',
-                          style: TextStyle(fontSize: 12, color: Colors.white),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          cardName.text,
-                          style: const TextStyle(fontSize: 12, color: Colors.white),
-                        ),
-                      ],
-                    ),
+  Widget cardFront() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Text(
+              'VISA',
+              style: TextStyle(
+                  fontSize: 24.30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+            Text(
+              'Visa electrónica',
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+          ],
+        ),
+        Text(
+          (cardNumber.text != '')
+              ? cardNumber.text
+              : "\t****\t\t****\t\t****\t\t****\t\t****",
+          style: const TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 197, 188, 188)),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Titular tarjeta',
+                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        cardName.text,
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Fecha caducidad',
-                          style: TextStyle(fontSize: 12, color: Colors.white),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          (cardExpiration.text != '')? cardExpiration.text : 'MM/AA',
-                          style: const TextStyle(fontSize: 12, color: Colors.white),
-                        ),
-                      ],
-                    ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Fecha caducidad',
+                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        (cardExpiration.text != '')
+                            ? cardExpiration.text
+                            : 'MM/AA',
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                    ],
                   ),
-                ],
-              )
-            ],
-          ),
-        ],
-      );
+                ),
+              ],
+            )
+          ],
+        ),
+      ],
+    );
   }
 
   Widget _buildTextField(
       {required double paddingLeft,
       required double paddingRight,
       required String hintText,
-      required TextInputType inputType, 
+      required TextInputType inputType,
       required TextEditingController controller,
       required MaskTextInputFormatter mask}) {
     return Container(
@@ -267,8 +294,8 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
         keyboardType: inputType,
         inputFormatters: [mask],
         controller: controller,
-        onChanged:(value) {
-          setState(() { });
+        onChanged: (value) {
+          setState(() {});
         },
       ),
     );
