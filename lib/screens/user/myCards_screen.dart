@@ -1,10 +1,9 @@
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Payment.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyCardsScreen extends StatefulWidget {
   @override
@@ -16,7 +15,6 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
   List<Payment> cards = [];
   int userId = 1;
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -25,9 +23,16 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
   }
 
   getAll() async {
-    await this._cineService.getCards(userId).then((value) => {setState(() {
-       cards = value!;
-    }), print(value)});
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final int? userIdPreference = prefs.getInt('userId');
+    if (userIdPreference != null) {
+      await this._cineService.getCards(userIdPreference).then((value) => {
+            setState(() {
+              cards = value!;
+            }),
+            print(value)
+          });
+    }
   }
 
   @override
@@ -38,13 +43,19 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
 
         child: Column(
           children: [
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             //VirtualCreditCard(cardNumber: cards[0].cardNumber.toString(), cardHolderName: cards[0].name.toString(), expiryMonth: cards[0].expirationDate.toString(), expiryYear: cards[0].expirationDate.toString(), cvv: cards[0].cvv.toString()),
-            
-            (cards.length > 1) ? _buildCards() : _buildCard(name: cards.first.name, cvv: cards.first.cvv.toString(), expiration:  cards.first.expirationDate.toString(), number: cards.first.cardNumber.toString()),
+            _buildCards(),
+            // (cards.length > 1)
+            //     ? _buildCards()
+            //     : _buildCard(
+            //         name: cards.first.name,
+            //         cvv: cards.first.cvv.toString(),
+            //         expiration: cards.first.expirationDate.toString(),
+            //         number: cards.first.cardNumber.toString()),
             Divider(),
-
-            
           ],
         ),
       ),
@@ -52,27 +63,33 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
   }
 
   Widget _buildCards() {
-     return CarouselSlider(
-      options: CarouselOptions(height: 200.0,
-      aspectRatio: 35,
-      //aspectRatio: 16/9,
-      viewportFraction: 0.7,
-      enlargeCenterPage: true,
-       onPageChanged: ( index, reason ) => {
-                print(index),
-                // setState(() {
-                // _currentPage = index;
-                  
-                // })
-            },),
-      items: cards.map((i) {
-        return Builder(
-          builder: (BuildContext context) {
-            return _buildCard(name: i.name, cvv: i.cvv.toString(), expiration:  i.expirationDate.toString(), number: i.cardNumber.toString());
-          },
-        );
-      },
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: 200.0,
+        aspectRatio: 35,
+        //aspectRatio: 16/9,
+        viewportFraction: 0.7,
+        enlargeCenterPage: true,
+        onPageChanged: (index, reason) => {
+          print(index),
+          // setState(() {
+          // _currentPage = index;
 
+          // })
+        },
+      ),
+      items: cards.map(
+        (i) {
+          return Builder(
+            builder: (BuildContext context) {
+              return _buildCard(
+                  name: i.name,
+                  cvv: i.cvv.toString(),
+                  expiration: i.expirationDate.toString(),
+                  number: i.cardNumber.toString());
+            },
+          );
+        },
       ).toList(),
     );
   }
@@ -121,9 +138,11 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
             ],
           ),
           Text(
-            (number != '')? number : "\t****\t\t****\t\t****\t\t****\t\t****",
+            (number != '') ? number : "\t****\t\t****\t\t****\t\t****\t\t****",
             style: const TextStyle(
-                fontSize: 26, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 197, 188, 188)),
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 197, 188, 188)),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,7 +163,8 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                         ),
                         Text(
                           name,
-                          style: const TextStyle(fontSize: 12, color: Colors.white),
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
                         ),
                       ],
                     ),
@@ -161,8 +181,9 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                           height: 10,
                         ),
                         Text(
-                          (expiration != '')? expiration : 'MM/AA',
-                          style: const TextStyle(fontSize: 12, color: Colors.white),
+                          (expiration != '') ? expiration : 'MM/AA',
+                          style: const TextStyle(
+                              fontSize: 12, color: Colors.white),
                         ),
                       ],
                     ),
@@ -255,7 +276,4 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
   //     );
   // }
 
-
-
- 
 }

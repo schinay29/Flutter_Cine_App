@@ -53,6 +53,7 @@ class _UserScreenState extends State<UserScreen> {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       if (user?.email != null && user?.email != '') {
         prefs.setString('username', user!.email);
+        prefs.setInt('userId', user!.userId);
       }
       // Navigator.push(BuildContext context,MaterialPageRoute(builder: (context) => const UserProfileScreen()),);
       return null;
@@ -74,6 +75,7 @@ class _UserScreenState extends State<UserScreen> {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       if (user?.email != null && user?.email != '') {
         prefs.setString('username', user!.email);
+        prefs.setInt('userId', user!.userId);
       }
 
       return null;
