@@ -25,7 +25,9 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
   }
 
   getAll() async {
-    await this._cineService.getCards(userId).then((value) => {cards = value!, print(value)});
+    await this._cineService.getCards(userId).then((value) => {setState(() {
+       cards = value!;
+    }), print(value)});
   }
 
   @override
@@ -38,7 +40,8 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
           children: [
             SizedBox(height: 20,),
             //VirtualCreditCard(cardNumber: cards[0].cardNumber.toString(), cardHolderName: cards[0].name.toString(), expiryMonth: cards[0].expirationDate.toString(), expiryYear: cards[0].expirationDate.toString(), cvv: cards[0].cvv.toString()),
-            (cards.length > 1 ) ? _buildCards() : _buildCard(name: cards.first.name, cvv: cards.first.cvv.toString(), expiration:  cards.first.expirationDate.toString(), number: cards.first.cardNumber.toString()),
+            
+            (cards.length > 1) ? _buildCards() : _buildCard(name: cards.first.name, cvv: cards.first.cvv.toString(), expiration:  cards.first.expirationDate.toString(), number: cards.first.cardNumber.toString()),
             Divider(),
 
             
