@@ -47,7 +47,7 @@ class _OrderScreenState extends State<OrderScreen> {
               height: 16,
             ),
             _showPayMethod(),
-            _showInfo(name: widget.movie.name, date: DateTime.now(), amount: widget.seats.length),
+            _showInfo(name: widget.movie.name, sesionDate: widget.day + ' '+widget.schedule + ', ' + DateTime.now().year.toString(), amount: widget.seats.length),
             SizedBox(height: 20,),
             Row(
               children: [
@@ -194,8 +194,8 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  Widget _showInfo({required String name, required DateTime date, required int amount}) {
-    var formatDate = DateFormat('dd/MM/yyyy HH:mm').format(date);
+  Widget _showInfo({required String name, required String sesionDate, required int amount}) {
+    //var formatDate = DateFormat('dd/MM/yyyy HH:mm').format(date);
     return Container(
       margin: EdgeInsets.only(left: 18, top: 12),
       child: Column(
@@ -205,7 +205,7 @@ class _OrderScreenState extends State<OrderScreen> {
           SizedBox(height: 6,),
           Text(name),
           SizedBox(height: 5,),
-          Text(formatDate),
+          Text(sesionDate),
           SizedBox(height: 5,),
           Row(
             children: [SizedBox(width: 15,), Text(amount.toString() + ' entradas'), SizedBox(width: 250,), Text('x 5€')],

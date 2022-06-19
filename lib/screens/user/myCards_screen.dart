@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Payment.dart';
+import 'package:cine_view/screens/user/addPayment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,6 +57,32 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
             //         expiration: cards.first.expirationDate.toString(),
             //         number: cards.first.cardNumber.toString()),
             Divider(),
+            Container(
+                // top: 25,
+                // left: 10,
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () => {
+                    print('taptaptap'),
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddPaymentScreen()),
+                    )
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: Colors.blue[600],
+                        borderRadius: BorderRadius.circular(12)),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                )),
           ],
         ),
       ),
