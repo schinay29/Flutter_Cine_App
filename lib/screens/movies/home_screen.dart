@@ -135,10 +135,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [ 
-        //Image.network('https://es.web.img3.acsta.net/pictures/14/01/30/18/07/456916.jpg', height: 150, width: 150),
-        // ARREGLAR FIT
-        //imagen
         Container(
+          child: GestureDetector(
+            onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DetailScreen(movie)),),
+          ),
           margin: const EdgeInsets.only( top: 10, left: 15),
           width: 120,
           height: 180,

@@ -1,6 +1,7 @@
 import 'package:cine_view/models/Movie.dart';
 import 'package:cine_view/screens/buyout/order_screen.dart';
 import 'package:cine_view/screens/movies/home_screen.dart';
+import 'package:cine_view/screens/user/addPayment_screen.dart';
 import 'package:cine_view/screens/user/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +16,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _indexPage = 0;
   // List<Widget> _screens = [ListMovie(), BuyTicketsScreen()];
-  final List<Widget> _screens = [HomeScreen(), OrderScreen(Movie(0, 'prueba', '', '', 120, '', '', 0)), UserScreen()];
+  final List<Widget> _screens = [HomeScreen(), AddPaymentScreen() , UserScreen()];
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);

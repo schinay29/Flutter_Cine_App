@@ -1,11 +1,17 @@
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Movie.dart';
+import 'package:cine_view/models/Room.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 
 class OrderScreen extends StatefulWidget {
   final Movie movie;
-  const OrderScreen(this.movie);
+  final List<String> seats;
+  final String day;
+  final Room room;
+  final String schedule;
+  const OrderScreen(this.movie, this.seats, this.day, this.schedule, this.room);
   @override
   State<OrderScreen> createState() => _OrderScreenState();
 }
@@ -13,8 +19,7 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   final CineService _cineService = CineService();
   List<String> tarjetas = [];
-  var imagenPrueba =
-      'https://www.cinemascomics.com/wp-content/uploads/2022/04/poster-doctor-strange-en-el-multiverso-de-la-locura-5.jpg';
+  
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +46,38 @@ class _OrderScreenState extends State<OrderScreen> {
             SizedBox(
               height: 16,
             ),
-            _buildDetails(),
+            _showPayMethod(),
+            _showInfo(name: widget.movie.name, date: DateTime.now(), amount: widget.seats.length),
+            SizedBox(height: 20,),
+            Row(
+              children: [
+                Expanded(
+              child: SizedBox(
+                height: 50,
+                child: FlatButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18)),
+                  color: Colors.blue,
+                  onPressed: () {
+                    // Navigator.push(
+                    // context,
+                    // MaterialPageRoute(
+                    //   builder: (context) => OrderScreen(movieSesions!.movie, selectList, selectedDay.toString(), selectedSchedule.toString(), room!),
+                    // ),
+                    // );
+                  },
+                  child: Text(
+                    "Completar Compra".toUpperCase(),
+                    style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+              ],
+            )
           ],
         ),
       ),
@@ -57,7 +93,7 @@ class _OrderScreenState extends State<OrderScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         image: DecorationImage(
-            image: NetworkImage(imagenPrueba), fit: BoxFit.fill),
+            image: NetworkImage(widget.movie.img), fit: BoxFit.fill),
         color: Colors.transparent,
         boxShadow: const [
           BoxShadow(
@@ -70,16 +106,6 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  Widget _buildDetails() {
-    return Container(
-      child: Column(
-        children: [
-          //(tarjetas == null)? _addPayMethod(): _showPayMethod(),
-          _showPayMethod(),
-        ],
-      ),
-    );
-  }
 
   Widget _addPayMethod() {
     return Container();
@@ -160,6 +186,35 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
             ),
           ),
+
+
+
+        ],
+      ),
+    );
+  }
+
+  Widget _showInfo({required String name, required DateTime date, required int amount}) {
+    var formatDate = DateFormat('dd/MM/yyyy HH:mm').format(date);
+    return Container(
+      margin: EdgeInsets.only(left: 18, top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Detalles de la compra', style: TextStyle(fontSize: 16, color: Colors.black38),),
+          SizedBox(height: 6,),
+          Text(name),
+          SizedBox(height: 5,),
+          Text(formatDate),
+          SizedBox(height: 5,),
+          Row(
+            children: [SizedBox(width: 15,), Text(amount.toString() + ' entradas'), SizedBox(width: 250,), Text('x 5€')],
+          ),
+          SizedBox(height: 5,),
+          Row(
+            children: [SizedBox(width: 25,), Text(' TOTAL'), SizedBox(width: 250,), Text((amount * 5).toString() + '€')],
+          ),
+
         ],
       ),
     );

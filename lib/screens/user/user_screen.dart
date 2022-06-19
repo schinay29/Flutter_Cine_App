@@ -20,7 +20,7 @@ class _UserScreenState extends State<UserScreen> {
   Duration get loginTime => const Duration(milliseconds: 2250);
 
   bool isLoggedIn = false;
-  String name = '';
+  //String name = '';
   @override
   void initState() {
     super.initState();

@@ -5,6 +5,7 @@ import 'package:cine_view/models/Payment.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
+
 class MyCardsScreen extends StatefulWidget {
   @override
   State<MyCardsScreen> createState() => _MyCardsScreenState();
@@ -36,6 +37,7 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
         child: Column(
           children: [
             SizedBox(height: 20,),
+            //VirtualCreditCard(cardNumber: cards[0].cardNumber.toString(), cardHolderName: cards[0].name.toString(), expiryMonth: cards[0].expirationDate.toString(), expiryYear: cards[0].expirationDate.toString(), cvv: cards[0].cvv.toString()),
             (cards.length > 1 ) ? _buildCards() : _buildCard(name: cards.first.name, cvv: cards.first.cvv.toString(), expiration:  cards.first.expirationDate.toString(), number: cards.first.cardNumber.toString()),
             Divider(),
 
