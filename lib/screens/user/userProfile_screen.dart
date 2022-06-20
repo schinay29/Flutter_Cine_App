@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cine_view/Services/CineService.dart';
-import 'package:cine_view/screens/user/editProfile.dart';
 import 'package:cine_view/screens/user/myCards_screen.dart';
 import 'package:cine_view/screens/user/user_screen.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +83,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     );
                   }),
               const SizedBox(
-                height: 10,
+                height: 300,
               ),
               ProfileMenu(
                   text: 'Cerrar Sesión',

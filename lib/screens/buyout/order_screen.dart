@@ -150,15 +150,19 @@ class _OrderScreenState extends State<OrderScreen> {
       margin: EdgeInsets.only(left: 7, right: 18, top: 10),
       color: Colors.white60,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTextField(paddingLeft: 18, paddingRight: 18, hintText: 'Numero de tarjeta', inputType: TextInputType.number,  mask: cardNumberMask),
-          _buildTextField(paddingLeft: 18, paddingRight: 18, hintText: 'Nombre propietario', inputType: TextInputType.text,  mask: MaskTextInputFormatter()),
           
+          SizedBox(height: 10,),
+          _buildTextField(width: 250, height: 25, hintText: 'Numero de tarjeta', inputType: TextInputType.number,  mask: cardNumberMask),
+          SizedBox(height: 15,),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-          _buildTextField(paddingLeft: 18, paddingRight: 18, hintText: 'Fecha exp', inputType: TextInputType.number,  mask: cardDateMask),
-          _buildTextField(paddingLeft: 18, paddingRight: 18, hintText: 'Cvv', inputType: TextInputType.number,  mask: cardCvvMask),
+          _buildTextField(width: 100, height: 25, hintText: 'Fecha exp', inputType: TextInputType.number,  mask: cardDateMask),
+          SizedBox(width: 7),
+          _buildTextField(width: 80, height: 25, hintText: 'Cvv', inputType: TextInputType.number,  mask: cardCvvMask),
 
             ],
           )
@@ -340,15 +344,14 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   Widget _buildTextField(
-      {required double paddingLeft,
-      required double paddingRight,
+      {required double width,
+      required double height,
       required String hintText,
       required TextInputType inputType,
       required MaskTextInputFormatter mask}) {
     return SizedBox(
-      // alignment: Alignment.bottomLeft,
-      width: 250,
-      height: 25,
+      width: width,
+      height: height,
       child: TextField(
         decoration: InputDecoration(
             labelText: hintText,
