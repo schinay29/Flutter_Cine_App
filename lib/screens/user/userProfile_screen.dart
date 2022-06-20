@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cine_view/Services/CineService.dart';
+import 'package:cine_view/screens/user/editProfile.dart';
 import 'package:cine_view/screens/user/myCards_screen.dart';
 import 'package:cine_view/screens/user/user_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,27 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   var _image;
   final CineService _cineService = CineService();
+  var _email;
   // File? file;
   // ImagePicker image = ImagePicker();kkkkc
+  @override
+  void initState() {
+    super.initState();
+    emailUser();
+  }
+
+  void emailUser() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('username');
+
+    if (userId != null && userId != '') {
+      debugPrint('User login Email user profile: ' + userId);
+      setState(() {
+        _email = userId;
+      });
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +61,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 height: 20,
               ),
               ProfileMenu(
-                  text: 'Editar Perfil',
+                  text: _email != null ? _email : '',
                   icon: Icons.person_outlined,
-                  press: () {}),
+                  press: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => EditProfileScreen()),
+                    // );
+                  }),
               const SizedBox(
                 height: 10,
               ),
@@ -57,13 +83,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       MaterialPageRoute(builder: (context) => MyCardsScreen()),
                     );
                   }),
-              const SizedBox(
-                height: 10,
-              ),
-              ProfileMenu(
-                  text: 'Mis pedidos',
-                  icon: Icons.shopping_cart_outlined,
-                  press: () {}),
               const SizedBox(
                 height: 10,
               ),
