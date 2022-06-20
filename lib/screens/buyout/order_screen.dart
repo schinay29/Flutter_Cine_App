@@ -1,9 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Movie.dart';
+import 'package:cine_view/models/Order.dart';
 import 'package:cine_view/models/Room.dart';
+import 'package:cine_view/screens/buyout/ticket_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderScreen extends StatefulWidget {
   final Movie movie;
@@ -19,7 +24,7 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   final CineService _cineService = CineService();
   List<String> tarjetas = [];
-  
+  double ticketPrice = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -47,35 +52,46 @@ class _OrderScreenState extends State<OrderScreen> {
               height: 16,
             ),
             _showPayMethod(),
-            _showInfo(name: widget.movie.name, sesionDate: widget.day + ' '+widget.schedule + ', ' + DateTime.now().year.toString(), amount: widget.seats.length),
-            SizedBox(height: 20,),
+            _showInfo(
+                name: widget.movie.name,
+                sesionDate: widget.day +
+                    ' ' +
+                    widget.schedule +
+                    ', ' +
+                    DateTime.now().year.toString(),
+                amount: widget.seats.length),
+            SizedBox(
+              height: 20,
+            ),
             Row(
               children: [
                 Expanded(
-              child: SizedBox(
-                height: 50,
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18)),
-                  color: Colors.blue,
-                  onPressed: () {
-                    // Navigator.push(
-                    // context,
-                    // MaterialPageRoute(
-                    //   builder: (context) => OrderScreen(movieSesions!.movie, selectList, selectedDay.toString(), selectedSchedule.toString(), room!),
-                    // ),
-                    // );
-                  },
-                  child: Text(
-                    "Completar Compra".toUpperCase(),
-                    style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                  child: SizedBox(
+                    height: 50,
+                    child: FlatButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18)),
+                      color: Colors.blue,
+                      onPressed: () {
+                        saveOrder();
+
+                        // Navigator.push(
+                        // context,
+                        // MaterialPageRoute(
+                        //   builder: (context) => OrderScreen(movieSesions!.movie, selectList, selectedDay.toString(), selectedSchedule.toString(), room!),
+                        // ),
+                        // );
+                      },
+                      child: Text(
+                        "Completar Compra".toUpperCase(),
+                        style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
               ],
             )
           ],
@@ -105,7 +121,6 @@ class _OrderScreenState extends State<OrderScreen> {
       ),
     );
   }
-
 
   Widget _addPayMethod() {
     return Container();
@@ -186,36 +201,97 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
             ),
           ),
-
-
-
         ],
       ),
     );
   }
 
-  Widget _showInfo({required String name, required String sesionDate, required int amount}) {
+  Widget _showInfo(
+      {required String name, required String sesionDate, required int amount}) {
     //var formatDate = DateFormat('dd/MM/yyyy HH:mm').format(date);
     return Container(
       margin: EdgeInsets.only(left: 18, top: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Detalles de la compra', style: TextStyle(fontSize: 16, color: Colors.black38),),
-          SizedBox(height: 6,),
+          Text(
+            'Detalles de la compra',
+            style: TextStyle(fontSize: 16, color: Colors.black38),
+          ),
+          SizedBox(
+            height: 6,
+          ),
           Text(name),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           Text(sesionDate),
-          SizedBox(height: 5,),
-          Row(
-            children: [SizedBox(width: 15,), Text(amount.toString() + ' entradas'), SizedBox(width: 250,), Text('x 5€')],
+          SizedBox(
+            height: 5,
           ),
-          SizedBox(height: 5,),
           Row(
-            children: [SizedBox(width: 25,), Text(' TOTAL'), SizedBox(width: 250,), Text((amount * 5).toString() + '€')],
+            children: [
+              SizedBox(
+                width: 15,
+              ),
+              Text(amount.toString() + ' entradas'),
+              SizedBox(
+                width: 250,
+              ),
+              Text('x 5€')
+            ],
           ),
-
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 25,
+              ),
+              Text(' TOTAL'),
+              SizedBox(
+                width: 250,
+              ),
+              Text((amount * ticketPrice).toString() + '€')
+            ],
+          ),
         ],
+      ),
+    );
+  }
+
+  saveOrder() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final int? userId = prefs.getInt('userId') ?? 0;
+    int roomMovieId = 0;
+    Order? order;
+    int seatId = 0;
+
+    await _cineService
+        .getRoomMovie(widget.room.roomId, widget.movie.movieId, widget.schedule,
+            widget.day)
+        .then((value) => roomMovieId = value);
+    await _cineService
+        .saveOrder(new Order(0, widget.seats.length,
+            ticketPrice * widget.seats.length, DateTime.now(), userId!))
+        .then((value) => {
+              order = value,
+            });
+
+    widget.seats.forEach((e) async => {
+          await _cineService.saveSeat(roomMovieId, e).then((value) async => {
+                seatId = value!,
+                print(value),
+                await _cineService.saveOrderSeat(
+                    order!.id, seatId, ticketPrice),
+              }),
+        });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TicketScreen(widget.movie, widget.seats,
+            widget.day, widget.schedule, widget.room, order!),
       ),
     );
   }

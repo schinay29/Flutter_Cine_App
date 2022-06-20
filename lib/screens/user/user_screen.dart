@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// const users = const {
-//   'dribbble@gmail.com': '12345',
-//   'hunter@gmail.com': 'hunter',
-// };
+
 class UserScreen extends StatefulWidget {
   @override
   _UserScreenState createState() => _UserScreenState();

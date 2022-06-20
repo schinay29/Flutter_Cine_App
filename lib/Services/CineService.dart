@@ -114,7 +114,7 @@ class CineService {
       body: jsonEncode(<String, dynamic>{
         'Quantity': order.quantity,
         'Price': order.price,
-        'CreatedDate': order.createdDate,
+        'CreatedDate': order.createdDate.toIso8601String(),
         'UserId': order.userId,
       }),
     );
@@ -130,6 +130,7 @@ class CineService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
+        'Id': 0,
         'OrderId': orderId,
         'SeatId': seatId,
         'price': price,
@@ -137,6 +138,29 @@ class CineService {
     );
     if(res.statusCode != 200) return null;
     return 'successfully';
+  }
+
+  Future<int?> saveSeat(int sessionId, String seatNumber) async {
+    Response res = await post(
+    Uri.parse('$apiUrl/Seat'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'RoomMovieId': sessionId,
+        'Number': seatNumber,
+      }),
+    );
+    if(res.statusCode != 200) return null;
+    //return 'successfully';
+    return jsonDecode(res.body) as int;
+  }
+
+  Future<int> getRoomMovie(int roomId, int movieId, String schedule, String day) async {
+    var result;
+    final res = await get(Uri.parse('$apiUrl/RoomMovie/$roomId/$movieId/$schedule/$day'));
+    //return jsonDecode(res.body)['id'];
+    return jsonDecode(res.body) as int;
   }
 
   

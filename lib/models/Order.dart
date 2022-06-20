@@ -12,7 +12,7 @@ class Order {
       : id = json['id'],
         quantity = json['quantity'],
         price = json['price'],
-        createdDate = json['createdDate'],
+        createdDate = DateTime.parse(json['createdDate']),
         userId = json['userId'];
         
     
