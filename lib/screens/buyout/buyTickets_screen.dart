@@ -48,6 +48,20 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
     return Scaffold(
         body: Column(
       children: [
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: Container(
+            child: Text("Elegir horario",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
         _buildDates(),
         const SizedBox(
           height: 20,
@@ -57,13 +71,89 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
           height: 10,
         ),
         const SizedBox(height: 20),
+        SizedBox(
+          width: double.infinity,
+          child: Container(
+            child: Text("Elegir asientos",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          ),
+        ),
         Column(
           children:
               List<Widget>.generate(room != null ? room!.row : 0, (int index) {
-            return Container(child: _buildSeats(letter: letter[index]),);
+            return Container(
+              child: _buildSeats(letter: letter[index]),
+            );
           }).toList(),
         ),
         const SizedBox(height: 20),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: Row(
+                  children: [
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: Colors.green.withOpacity(0.25), // border color
+                        shape: BoxShape.circle,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(2), // border width
+                        child: Container(
+                          // or ClipRRect if you need to clip the content
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xff4353AB), // inner circle color
+                          ),
+                          child: Container(), // inner content
+                        ),
+                      ),
+                    ),
+                    Text("Asientos libres",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+              Container(
+                child: Row(
+                  children: [
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: Colors.green.withOpacity(0.25), // border color
+                        shape: BoxShape.circle,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(2), // border width
+                        child: Container(
+                          // or ClipRRect if you need to clip the content
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color.fromARGB(
+                                255, 162, 187, 196), // inner circle color
+                          ),
+                          child: Container(), // inner content
+                        ),
+                      ),
+                    ),
+                    Text("Asientos reservados",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
         Row(
           children: [
             Expanded(
@@ -75,10 +165,15 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
                   color: Colors.blue,
                   onPressed: () {
                     Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OrderScreen(movieSesions!.movie, selectList, selectedDay.toString(), selectedSchedule.toString(), room!),
-                    ),
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OrderScreen(
+                            movieSesions!.movie,
+                            selectList,
+                            selectedDay.toString(),
+                            selectedSchedule.toString(),
+                            room!),
+                      ),
                     );
                   },
                   child: Text(
@@ -93,7 +188,6 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
             ),
           ],
         ),
-
       ],
     ));
   }
@@ -143,9 +237,12 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
       height: 30.0,
       child: GroupButton(
         isRadio: true,
-        onSelected: (i, selected, bol) => { setState(() {
-          selectedSchedule = i.toString();
-        }), debugPrint('Button #$i $selected')},
+        onSelected: (i, selected, bol) => {
+          setState(() {
+            selectedSchedule = i.toString();
+          }),
+          debugPrint('Button #$i $selected')
+        },
         options: GroupButtonOptions(
           buttonHeight: 30,
           buttonWidth: 65,
@@ -163,7 +260,6 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
     );
   }
 
-
   Widget _buildSeats({required String letter}) {
     return Wrap(
       children: List<Widget>.generate(
@@ -172,7 +268,7 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
           return Container(
             margin: EdgeInsets.all(0.2),
             child: ChoiceChip(
-              selectedColor: Colors.deepPurple,
+              selectedColor: Color(0xff4353AB),
               elevation: 0.5,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               label: Text(''),
@@ -191,5 +287,4 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
       ).toList(),
     );
   }
-
 }
