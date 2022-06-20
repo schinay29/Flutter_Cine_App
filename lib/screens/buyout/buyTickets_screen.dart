@@ -56,7 +56,10 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
           child: Container(
             child: Text("Elegir horario",
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black54)),
           ),
         ),
         const SizedBox(
@@ -76,7 +79,10 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
           child: Container(
             child: Text("Elegir asientos",
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black54)),
           ),
         ),
         Column(
@@ -90,14 +96,14 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
         const SizedBox(height: 20),
         Container(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Container(
                 child: Row(
                   children: [
                     Container(
-                      width: 28,
-                      height: 28,
+                      width: 20,
+                      height: 20,
                       decoration: BoxDecoration(
                         color: Colors.green.withOpacity(0.25), // border color
                         shape: BoxShape.circle,
@@ -114,10 +120,7 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
                         ),
                       ),
                     ),
-                    Text("Asientos libres",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text("Asientos libres", textAlign: TextAlign.left),
                   ],
                 ),
               ),
@@ -125,8 +128,8 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
                 child: Row(
                   children: [
                     Container(
-                      width: 28,
-                      height: 28,
+                      width: 20,
+                      height: 20,
                       decoration: BoxDecoration(
                         color: Colors.green.withOpacity(0.25), // border color
                         shape: BoxShape.circle,
@@ -144,10 +147,10 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
                         ),
                       ),
                     ),
-                    Text("Asientos reservados",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text(
+                      "Asientos reservados",
+                      textAlign: TextAlign.left,
+                    ),
                   ],
                 ),
               ),
