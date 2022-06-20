@@ -33,28 +33,28 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (snapshot.data != null) movies = snapshot.data!;
                 }
               }
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(children: [
+                    SizedBox(
+                      width: 80,
+                    ),
+                    const Text(
+                      'Cartelera de peliculas',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                  ]),
+                  Divider(),
+                  SizedBox(
+                    height: 25,
+                  ),
                   _buildRecentMovies(),
-                  _buildPageIndicator(),
                   const SizedBox(
                     height: 40,
                   ),
-                  // SizedBox(
-                  //   width: double.infinity,
-                  //   child: Container(
-                  //     child: Text("Esta semana",
-                  //         textAlign: TextAlign.left,
-                  //         style: TextStyle(
-                  //             fontSize: 16, fontWeight: FontWeight.bold)),
-                  //   ),
-                  // ),
-                  // Text("Esta semana",
-                  //     textAlign: TextAlign.left,
-                  //     style:
-                  //         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(

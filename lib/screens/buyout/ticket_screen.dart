@@ -32,6 +32,7 @@ class _TicketScreenState extends State<TicketScreen> {
       backgroundColor: Colors.blue,
       body: Container(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TicketWidget(
               width: 350,

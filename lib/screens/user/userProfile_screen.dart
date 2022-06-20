@@ -83,7 +83,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     );
                   }),
               const SizedBox(
-                height: 300,
+                height: 20,
               ),
               ProfileMenu(
                   text: 'Cerrar Sesión',

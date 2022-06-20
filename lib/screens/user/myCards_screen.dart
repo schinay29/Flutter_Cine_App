@@ -64,22 +64,24 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
                 child: GestureDetector(
                   onTap: () => {
                     print('taptaptap'),
-                     Navigator.push(
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AddPaymentScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => AddPaymentScreen()),
                     )
                   },
                   child: Container(
+                    margin: EdgeInsets.only(right: 20, top: 12),
                     alignment: Alignment.center,
-                    width: 40,
-                    height: 40,
+                    width: 50,
+                    height: 50,
                     decoration: BoxDecoration(
                         color: Colors.blue[600],
-                        borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(25)),
                     child: const Icon(
                       Icons.add,
                       color: Colors.white,
-                      size: 18,
+                      size: 26,
                     ),
                   ),
                 )),
@@ -130,6 +132,7 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
     return Container(
       height: 195,
       margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.all(16),
       width: double.infinity,
       //padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
@@ -223,84 +226,4 @@ class _MyCardsScreenState extends State<MyCardsScreen> {
       ),
     );
   }
-
-  // Widget cardFront(){
-  //       return Column(
-  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: const [
-  //             Text(
-  //               'VISA',
-  //               style: TextStyle(
-  //                   fontSize: 24.30,
-  //                   fontWeight: FontWeight.bold,
-  //                   color: Colors.white),
-  //             ),
-  //             Text(
-  //               'Visa electrónica',
-  //               style: TextStyle(
-  //                   fontSize: 12,
-  //                   fontWeight: FontWeight.bold,
-  //                   color: Colors.white),
-  //             ),
-  //           ],
-  //         ),
-  //         Text(
-  //           (cardNumber.text != '')? cardNumber.text : "\t****\t\t****\t\t****\t\t****\t\t****",
-  //           style: const TextStyle(
-  //               fontSize: 26, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 197, 188, 188)),
-  //         ),
-  //         Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-  //                 Expanded(
-  //                   child: Column(
-  //                     crossAxisAlignment: CrossAxisAlignment.start,
-  //                     children: [
-  //                       const Text(
-  //                         'Titular tarjeta',
-  //                         style: TextStyle(fontSize: 12, color: Colors.white),
-  //                       ),
-  //                       const SizedBox(
-  //                         height: 10,
-  //                       ),
-  //                       Text(
-  //                         cardName.text,
-  //                         style: const TextStyle(fontSize: 12, color: Colors.white),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //                 Expanded(
-  //                   child: Column(
-  //                     crossAxisAlignment: CrossAxisAlignment.start,
-  //                     children: [
-  //                       const Text(
-  //                         'Fecha caducidad',
-  //                         style: TextStyle(fontSize: 12, color: Colors.white),
-  //                       ),
-  //                       const SizedBox(
-  //                         height: 10,
-  //                       ),
-  //                       Text(
-  //                         (cardExpiration.text != '')? cardExpiration.text : 'MM/AA',
-  //                         style: const TextStyle(fontSize: 12, color: Colors.white),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ],
-  //             )
-  //           ],
-  //         ),
-  //       ],
-  //     );
-  // }
-
 }

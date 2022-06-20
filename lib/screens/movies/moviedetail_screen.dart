@@ -116,19 +116,12 @@ class _DetailScreenState extends State<DetailScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Wrap(
-                      children: List<Widget>.generate(
-                        3,
-                        (int index) {
-                          const SizedBox(
-                            height: 10,
-                          );
-                          return Chip(
-                            label: Text('Item $index'),
-                          );
-                        },
-                      ).toList(),
+
+                    Chip(
+                      label:
+                          Text(widget.movie.duration.toString() + ' minutos'),
                     ),
+
                     const SizedBox(
                       height: 10,
                     ),
@@ -136,8 +129,11 @@ class _DetailScreenState extends State<DetailScreen> {
                     const SizedBox(
                       height: 16,
                     ),
-                    const Text('Cast', style: TextStyle(fontSize: 16, color: Colors.black45)),
-                    SizedBox(height: 8,),
+                    const Text('Cast',
+                        style: TextStyle(fontSize: 16, color: Colors.black45)),
+                    SizedBox(
+                      height: 8,
+                    ),
                     Wrap(
                       children: [
                         FutureBuilder<List<Actor>>(
@@ -150,16 +146,14 @@ class _DetailScreenState extends State<DetailScreen> {
                               if (snapshot.connectionState ==
                                   ConnectionState.done) cast = snapshot.data!;
                               return Wrap(
-                                
                                   children: List.generate(cast.length, (index) {
-                                    return SizedBox(
-                                      child: CircleAvatar(
-                                    radius: 26,
-                                    backgroundColor: Colors.transparent,
-                                    backgroundImage:
-                                        NetworkImage(cast[index].url)),
-                                    );
-                                
+                                return SizedBox(
+                                  child: CircleAvatar(
+                                      radius: 26,
+                                      backgroundColor: Colors.transparent,
+                                      backgroundImage:
+                                          NetworkImage(cast[index].url)),
+                                );
                               }));
                             }),
                       ],
@@ -173,51 +167,56 @@ class _DetailScreenState extends State<DetailScreen> {
                       // })
                     ),
                     const SizedBox(
-                      height: 50,
+                      height: 25,
                     ),
                     // bottom buttons
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          margin: const EdgeInsets.only(right: 10),
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18),
-                              border: Border.all(color: Colors.black)),
-                          child: IconButton(
-                            icon: const Icon(Icons.favorite_border),
-                            onPressed: () {
-                              print("save favorite movie");
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: SizedBox(
-                            height: 50,
-                            child: FlatButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18)),
-                              color: Colors.blue,
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      // bottom: 15,
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            margin: const EdgeInsets.only(right: 10),
+                            height: 45,
+                            width: 45,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(18),
+                                border: Border.all(color: Colors.black)),
+                            child: IconButton(
+                              icon: const Icon(Icons.favorite_border),
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BuyTicketsScreen(widget.movie)),
-                                );
-                                //Navigator.pushNamed(context, '/second');
+                                print("save favorite movie");
                               },
-                              child: Text(
-                                "Comprar tickets".toUpperCase(),
-                                style: const TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                            ),
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: FlatButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18)),
+                                color: Colors.blue,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            BuyTicketsScreen(widget.movie)),
+                                  );
+                                  //Navigator.pushNamed(context, '/second');
+                                },
+                                child: Text(
+                                  "Comprar tickets".toUpperCase(),
+                                  style: const TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),

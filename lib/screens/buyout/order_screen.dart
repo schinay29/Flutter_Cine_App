@@ -26,7 +26,7 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   final CineService _cineService = CineService();
-   var cardNumberMask = MaskTextInputFormatter(
+  var cardNumberMask = MaskTextInputFormatter(
       mask: '####  ####  ####  ####', filter: {"#": RegExp(r'[0-9]')});
   var cardDateMask =
       MaskTextInputFormatter(mask: '##-##', filter: {"#": RegExp(r'[0-9]')});
@@ -34,7 +34,7 @@ class _OrderScreenState extends State<OrderScreen> {
       MaskTextInputFormatter(mask: '###', filter: {"#": RegExp(r'[0-9]')});
   // List<String> tarjetas = [];
   Payment? card;
-  var  fourLastDigits = '1234';
+  var fourLastDigits = '1234';
   double ticketPrice = 5;
 
   @override
@@ -48,12 +48,12 @@ class _OrderScreenState extends State<OrderScreen> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final int? userId = prefs.getInt('userId') ?? 0;
     print('user ' + userId.toString());
-    await _cineService.getDefaultCard(userId!).then((value) => 
-    setState(() { 
-      card = value; 
-      print(value);
-      if(card != null) fourLastDigits = card!.cardNumber.toString().substring(12); 
-    }));
+    await _cineService.getDefaultCard(userId!).then((value) => setState(() {
+          card = value;
+          print(value);
+          if (card != null)
+            fourLastDigits = card!.cardNumber.toString().substring(12);
+        }));
   }
 
   @override
@@ -79,9 +79,12 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
             _buildImage(),
             SizedBox(
-              height: 16,
+              height: 25,
             ),
             (card != null) ? _showPayMethod() : _addPayMethod(),
+            SizedBox(
+              height: 20,
+            ),
             _showInfo(
                 name: widget.movie.name,
                 sesionDate: widget.day +
@@ -91,32 +94,37 @@ class _OrderScreenState extends State<OrderScreen> {
                     DateTime.now().year.toString(),
                 amount: widget.seats.length),
             SizedBox(
-              height: 20,
+              height: 115,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: SizedBox(
-                    height: 50,
-                    child: FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18)),
-                      color: Colors.blue,
-                      onPressed: () {
-                        saveOrder();
-                      },
-                      child: Text(
-                        "Completar Compra".toUpperCase(),
-                        style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+            Container(
+              alignment: Alignment.bottomCenter,
+              margin: EdgeInsets.only(left: 13.5, right: 13),
+              width: MediaQuery.of(context).size.width / 1.09,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: FlatButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18)),
+                        color: Colors.blue,
+                        onPressed: () {
+                          saveOrder();
+                        },
+                        child: Text(
+                          "Completar Compra".toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            )
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -153,20 +161,36 @@ class _OrderScreenState extends State<OrderScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
-          SizedBox(height: 10,),
-          _buildTextField(width: 250, height: 25, hintText: 'Numero de tarjeta', inputType: TextInputType.number,  mask: cardNumberMask),
-          SizedBox(height: 15,),
+          SizedBox(
+            height: 10,
+          ),
+          _buildTextField(
+              width: 250,
+              height: 25,
+              hintText: 'Numero de tarjeta',
+              inputType: TextInputType.number,
+              mask: cardNumberMask),
+          SizedBox(
+            height: 15,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-          _buildTextField(width: 100, height: 25, hintText: 'Fecha exp', inputType: TextInputType.number,  mask: cardDateMask),
-          SizedBox(width: 7),
-          _buildTextField(width: 80, height: 25, hintText: 'Cvv', inputType: TextInputType.number,  mask: cardCvvMask),
-
+              _buildTextField(
+                  width: 100,
+                  height: 25,
+                  hintText: 'Fecha exp',
+                  inputType: TextInputType.number,
+                  mask: cardDateMask),
+              SizedBox(width: 7),
+              _buildTextField(
+                  width: 80,
+                  height: 25,
+                  hintText: 'Cvv',
+                  inputType: TextInputType.number,
+                  mask: cardCvvMask),
             ],
           )
-
         ],
       ),
     );
@@ -251,7 +275,6 @@ class _OrderScreenState extends State<OrderScreen> {
       ),
     );
   }
-    
 
   Widget _showInfo(
       {required String name, required String sesionDate, required int amount}) {
@@ -368,5 +391,4 @@ class _OrderScreenState extends State<OrderScreen> {
       ),
     );
   }
-
 }

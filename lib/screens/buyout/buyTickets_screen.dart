@@ -54,16 +54,17 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
         SizedBox(
           width: double.infinity,
           child: Container(
+            margin: EdgeInsets.all(16),
             child: Text("Elegir horario",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                     color: Colors.black54)),
           ),
         ),
         const SizedBox(
-          height: 20,
+          height: 5,
         ),
         _buildDates(),
         const SizedBox(
@@ -73,15 +74,16 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
         const SizedBox(
           height: 10,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 3),
         SizedBox(
           width: double.infinity,
           child: Container(
+            margin: EdgeInsets.all(16),
             child: Text("Elegir asientos",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                     color: Colors.black54)),
           ),
         ),
@@ -157,34 +159,41 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
             ],
           ),
         ),
+        SizedBox(
+          height: 85,
+        ),
         Row(
           children: [
-            Expanded(
-              child: SizedBox(
-                height: 50,
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18)),
-                  color: Colors.blue,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OrderScreen(
-                            movieSesions!.movie,
-                            selectList,
-                            selectedDay.toString(),
-                            selectedSchedule.toString(),
-                            room!),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    "Completar Compra".toUpperCase(),
-                    style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+            Container(
+              margin: EdgeInsets.only(left: 13.5, right: 13),
+              width: MediaQuery.of(context).size.width / 1.09,
+              child: Expanded(
+                child: SizedBox(
+                  height: 50,
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18)),
+                    color: Colors.blue,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrderScreen(
+                              movieSesions!.movie,
+                              selectList,
+                              selectedDay.toString(),
+                              selectedSchedule.toString(),
+                              room!),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Completar Compra".toUpperCase(),
+                      style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
                   ),
                 ),
               ),
@@ -197,12 +206,19 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
 
   Widget _buildDates() {
     //var dayList = movieSesions.schedules.map((e) => e.day.toString()).toSet().toList();
-    List<String> dayList = [];
+    List<dynamic> prueba = [];
     for (var e in (movieSesions != null) ? movieSesions!.detailSessions : []) {
-      dayList.add(e.schedules.map((e) => e.day.toString()).first);
+      // dayList.add(e.schedules.map((e) => e.day.toString()).first);
+      for (var x in e.schedules) {
+        prueba.add(x.day.toString());
+      }
+      // e.schedules.foreach((y) => dayList.add(e.day.first));
     }
-    return SizedBox(
-      height: 60.0,
+
+    List<String> dayList = prueba.map((e) => e.toString()).toSet().toList();
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      // height: 78.0,
       child: GroupButton(
         isRadio: true,
         onSelected: (i, selected, bol) => {
@@ -212,8 +228,8 @@ class _BuyTicketsScreenState extends State<BuyTicketsScreen> {
           })
         },
         options: GroupButtonOptions(
-          buttonHeight: 60,
-          buttonWidth: 50,
+          buttonHeight: 75,
+          buttonWidth: 62,
           borderRadius: BorderRadius.circular(8.0),
           spacing: 10,
           elevation: 0,
