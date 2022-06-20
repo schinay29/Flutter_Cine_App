@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/screens/user/myCards_screen.dart';
 import 'package:cine_view/screens/user/user_screen.dart';
@@ -11,6 +13,7 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  var _image;
   final CineService _cineService = CineService();
   // File? file;
   // ImagePicker image = ImagePicker();kkkkc
@@ -124,10 +127,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             clipBehavior: Clip.none,
             fit: StackFit.expand,
             children: [
-              const CircleAvatar(
-                backgroundImage:
-                    NetworkImage('https://picsum.photos/250?image=9'),
-              ),
+              _image != null
+                  ? CircleAvatar(
+                      backgroundImage: Image.file(
+                        _image,
+                        fit: BoxFit.cover,
+                      ).image,
+                    )
+                  : const CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          'http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png'),
+                    ),
               Positioned(
                 right: -7,
                 bottom: 0,
@@ -160,11 +170,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Future getGallery() async {
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+    XFile? img = await ImagePicker().pickImage(source: ImageSource.gallery);
+
     // var img = await image.getImage(source: ImageSource.gallery);
-    // setState(() {
-    //   file = File(img!.path);
-    // });
+    setState(() {
+      _image = File(img!.path);
+    });
   }
 
   Future<Null> logout() async {
