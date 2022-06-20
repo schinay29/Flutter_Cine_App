@@ -87,6 +87,12 @@ class CineService {
     //return null;
   }
 
+  Future<Payment?> getDefaultCard(int userId) async {
+    final res = await get(Uri.parse('$apiUrl/Payment/GetDefault/$userId'));
+     if (res.statusCode != 200) return null;
+    return Payment.fromJson(jsonDecode(res.body));
+  }
+
   Future<Payment?> saveCard(Payment payment) async {
     Response res = await post(
       Uri.parse('$apiUrl/Payment'),

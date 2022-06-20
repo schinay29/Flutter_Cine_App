@@ -170,6 +170,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Future<Null> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('username', '');
+    prefs.setInt('userId', 0);
     Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) => UserScreen(),
     ));

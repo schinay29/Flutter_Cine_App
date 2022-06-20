@@ -11,7 +11,7 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 class BuyTicketsScreen extends StatefulWidget {
   final Movie movie;
   const BuyTicketsScreen(this.movie);
-  _BuyTicketsScreenState createState() => _BuyTicketsScreenState();
+  State<BuyTicketsScreen> createState() => _BuyTicketsScreenState();
 }
 
 class _BuyTicketsScreenState extends State<BuyTicketsScreen> {

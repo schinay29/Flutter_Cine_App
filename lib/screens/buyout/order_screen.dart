@@ -3,11 +3,13 @@
 import 'package:cine_view/Services/CineService.dart';
 import 'package:cine_view/models/Movie.dart';
 import 'package:cine_view/models/Order.dart';
+import 'package:cine_view/models/Payment.dart';
 import 'package:cine_view/models/Room.dart';
 import 'package:cine_view/screens/buyout/ticket_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -23,8 +25,29 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   final CineService _cineService = CineService();
-  List<String> tarjetas = [];
+  // List<String> tarjetas = [];
+  Payment? card;
+  var  fourLastDigits = '1234';
   double ticketPrice = 5;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadData();
+  }
+
+  loadData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final int? userId = prefs.getInt('userId') ?? 0;
+    print('user ' + userId.toString());
+    await _cineService.getDefaultCard(userId!).then((value) => 
+    setState(() { 
+      card = value; 
+      print(value);
+      if(card != null) fourLastDigits = card!.cardNumber.toString().substring(12); 
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +74,7 @@ class _OrderScreenState extends State<OrderScreen> {
             SizedBox(
               height: 16,
             ),
-            _showPayMethod(),
+            (card != null) ? _showPayMethod() : _addPayMethod(),
             _showInfo(
                 name: widget.movie.name,
                 sesionDate: widget.day +
@@ -74,13 +97,6 @@ class _OrderScreenState extends State<OrderScreen> {
                       color: Colors.blue,
                       onPressed: () {
                         saveOrder();
-
-                        // Navigator.push(
-                        // context,
-                        // MaterialPageRoute(
-                        //   builder: (context) => OrderScreen(movieSesions!.movie, selectList, selectedDay.toString(), selectedSchedule.toString(), room!),
-                        // ),
-                        // );
                       },
                       child: Text(
                         "Completar Compra".toUpperCase(),
@@ -174,7 +190,7 @@ class _OrderScreenState extends State<OrderScreen> {
                       SizedBox(
                         height: 5,
                       ),
-                      Text('****\t\t****\t\t****\t\t' + '1234'),
+                      Text('****\t\t****\t\t****\t\t' + fourLastDigits),
                     ],
                   ),
                   SizedBox(
@@ -205,6 +221,7 @@ class _OrderScreenState extends State<OrderScreen> {
       ),
     );
   }
+    
 
   Widget _showInfo(
       {required String name, required String sesionDate, required int amount}) {
@@ -295,4 +312,5 @@ class _OrderScreenState extends State<OrderScreen> {
       ),
     );
   }
+
 }

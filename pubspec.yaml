@@ -49,6 +49,7 @@ dependencies:
   multi_select_flutter: ^4.1.2
   intl: ^0.17.0
   ticket_widget: ^0.0.1
+  modal_bottom_sheet: ^2.0.1
 
 dev_dependencies:
   flutter_test:
