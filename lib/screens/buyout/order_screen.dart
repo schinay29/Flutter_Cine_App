@@ -9,6 +9,7 @@ import 'package:cine_view/screens/buyout/ticket_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,6 +26,12 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   final CineService _cineService = CineService();
+   var cardNumberMask = MaskTextInputFormatter(
+      mask: '####  ####  ####  ####', filter: {"#": RegExp(r'[0-9]')});
+  var cardDateMask =
+      MaskTextInputFormatter(mask: '##-##', filter: {"#": RegExp(r'[0-9]')});
+  var cardCvvMask =
+      MaskTextInputFormatter(mask: '###', filter: {"#": RegExp(r'[0-9]')});
   // List<String> tarjetas = [];
   Payment? card;
   var  fourLastDigits = '1234';
@@ -139,7 +146,26 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   Widget _addPayMethod() {
-    return Container();
+    return Container(
+      margin: EdgeInsets.only(left: 7, right: 18, top: 10),
+      color: Colors.white60,
+      child: Column(
+        children: [
+          _buildTextField(paddingLeft: 18, paddingRight: 18, hintText: 'Numero de tarjeta', inputType: TextInputType.number,  mask: cardNumberMask),
+          _buildTextField(paddingLeft: 18, paddingRight: 18, hintText: 'Nombre propietario', inputType: TextInputType.text,  mask: MaskTextInputFormatter()),
+          
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+          _buildTextField(paddingLeft: 18, paddingRight: 18, hintText: 'Fecha exp', inputType: TextInputType.number,  mask: cardDateMask),
+          _buildTextField(paddingLeft: 18, paddingRight: 18, hintText: 'Cvv', inputType: TextInputType.number,  mask: cardCvvMask),
+
+            ],
+          )
+
+        ],
+      ),
+    );
   }
 
   Widget _showPayMethod() {
@@ -309,6 +335,33 @@ class _OrderScreenState extends State<OrderScreen> {
       MaterialPageRoute(
         builder: (context) => TicketScreen(widget.movie, widget.seats,
             widget.day, widget.schedule, widget.room, order!),
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+      {required double paddingLeft,
+      required double paddingRight,
+      required String hintText,
+      required TextInputType inputType,
+      required MaskTextInputFormatter mask}) {
+    return SizedBox(
+      // alignment: Alignment.bottomLeft,
+      width: 250,
+      height: 25,
+      child: TextField(
+        decoration: InputDecoration(
+            labelText: hintText,
+            labelStyle: TextStyle(fontSize: 16.0, color: Colors.grey.shade500),
+            fillColor: Colors.grey.shade100,
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none)),
+        keyboardType: inputType,
+        inputFormatters: [mask],
+        onChanged: (value) {
+          setState(() {});
+        },
       ),
     );
   }
