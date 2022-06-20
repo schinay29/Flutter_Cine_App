@@ -1,60 +1,46 @@
-import 'package:cine_view/models/Movie.dart';
-import 'package:cine_view/screens/buyout/order_screen.dart';
-import 'package:cine_view/screens/movies/home_screen.dart';
-import 'package:cine_view/screens/user/addPayment_screen.dart';
-import 'package:cine_view/screens/user/user_screen.dart';
+import 'package:cine_view/screens/tabNav/tab_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatefulWidget {
+// app.dart
+class App extends StatefulWidget {
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<StatefulWidget> createState() => AppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  int _indexPage = 0;
-  // List<Widget> _screens = [ListMovie(), BuyTicketsScreen()];
-  final List<Widget> _screens = [HomeScreen(), AddPaymentScreen() , UserScreen()];
+class AppState extends State<App> {
+  var _currentTab = TabItem.red;
+
+  void _selectTab(TabItem tabItem) {
+    setState(() => _currentTab = tabItem);
+  }
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    print("pruebaaa");
+    return Scaffold(
+      body: _buildBody(),
+      bottomNavigationBar: BottomNavigation(
+        currentTab: _currentTab,
+        onSelectTab: _selectTab,
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    // TODO: return a widget representing a page
+  }
+}
+
+void main() => runApp(new MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
-      // initialRoute: '/main',
-      // routes: {
-      //   '/main': (context) => HomeScreen(),
-      //   '/second': (context) => BuyTicketsScreen(),
-      // },
-      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
-      home: Scaffold(
-        body: _screens[_indexPage],
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: (index) {
-            setState(() {
-              _indexPage = index;
-            });
-          },
-          unselectedItemColor: const Color.fromARGB(137, 126, 124, 124),
-          showUnselectedLabels: true,
-          selectedItemColor: Colors.blue,
-          currentIndex: _indexPage,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: "Buscar"),
-            // BottomNavigationBarItem(
-            //     icon: Icon(Icons.scale_sharp), label: "Promociones"),
-            // BottomNavigationBarItem(icon: Icon(Icons.search), label: "Buscar"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.supervised_user_circle), label: "Usuarios")
-          ],
-        ),
-      ),
+      home: App(),
     );
   }
 }
